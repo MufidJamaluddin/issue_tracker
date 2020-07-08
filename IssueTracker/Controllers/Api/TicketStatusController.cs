@@ -28,6 +28,7 @@ namespace IssueTracker.Controllers.Api
         /// Get All Ticket Status Data
         /// </summary>
         [HttpGet]
+        //[Authorize(Policy = RolePolicy.User)]
         public IEnumerable<TicketStatusVM> GetAllData()
         {
             return TicketStatusServices.GetAllData();
