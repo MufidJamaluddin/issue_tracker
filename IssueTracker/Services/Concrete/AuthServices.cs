@@ -46,6 +46,16 @@ namespace IssueTracker.Services.Concrete
 
             UserVM user = _userRepository.GetOne(new UserVM { Email = model?.Email });
 
+            if(user == null)
+            {
+                return new CommonSResponse<AuthenticateResponse>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = "Account not found!",
+                };
+            }
+
             using SHA256 hasher = SHA256.Create();
 
             string modelPassword = Convert

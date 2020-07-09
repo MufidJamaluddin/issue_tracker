@@ -23,12 +23,20 @@ class User extends React.PureComponent<UserProps>
     public componentDidMount()
     {
         const requestedPage = this.props.data.page || 1;
-        this.props.requestUser(requestedPage, this.props.data.size);
+        this.props.searchUser(requestedPage, this.props.data.size, {
+            id: '',
+            name: '',
+            email: '',
+        });
     }
 
     private changePage(selectedItem: { selected: number })
     {
-        this.props.requestUser(selectedItem.selected + 1, this.props.data.size)
+        this.props.searchUser(selectedItem.selected + 1, this.props.data.size, {
+            id: '',
+            name: '',
+            email: '',
+        })
     }
 
     public render(): JSX.Element {

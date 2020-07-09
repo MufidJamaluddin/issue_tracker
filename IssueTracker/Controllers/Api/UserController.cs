@@ -27,7 +27,8 @@ namespace IssueTracker.Controllers.Api
         /// Get User Data with Pagination
         /// </summary>
         [HttpGet]
-        //[Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<UserVM> GetDataWithPagination([FromQuery] PaginationRequest request)
         {
             return UserServices.GetDataWithPagination(request);
@@ -38,7 +39,8 @@ namespace IssueTracker.Controllers.Api
         /// </summary>
         [HttpPost]
         [Route("search")]
-        //[Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<UserVM> SearchDataWithPagination([FromBody] SearchPaginationRequest<UserVM> request)
         {
             return UserServices.SearchDataWithPagination(request);

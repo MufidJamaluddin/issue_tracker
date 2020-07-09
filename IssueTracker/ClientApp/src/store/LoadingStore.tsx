@@ -21,29 +21,22 @@ export const reducer: Reducer<LoadingState> = (state: LoadingState | undefined, 
     }
 
     const action = incomingAction as KnownAction;
+    
     var listdata;
 
     switch (action.type)
     {
         case 'START_LOADING':
 
-            if (!state.isLoading)
-            {
-                listdata = state.queueList;
-                listdata.push(true)
+            listdata = state.queueList.slice()
+            listdata.push(true)
 
-                return { isLoading: true, queueList: listdata };
-            }
+            return { isLoading: true, queueList: listdata }
 
         case 'END_LOADING':
 
-            if (state.isLoading)
-            {
-                listdata = state.queueList;
-                listdata.pop()
-
-                return { isLoading: listdata.length === 0, queueList: listdata };
-            }
+            listdata = state.queueList.slice(1)
+            return { isLoading: listdata.length !== 0, queueList: listdata }
 
         default:
             return state;

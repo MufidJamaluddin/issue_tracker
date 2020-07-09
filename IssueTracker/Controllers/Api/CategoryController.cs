@@ -1,6 +1,8 @@
-﻿using IssueTracker.Models.ViewModels;
+﻿using IssueTracker.Models;
+using IssueTracker.Models.ViewModels;
 using IssueTracker.Models.ViewModels.Shared;
 using IssueTracker.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /**
@@ -25,7 +27,8 @@ namespace IssueTracker.Controllers.Api
         /// Get Category Data with Pagination
         /// </summary>
         [HttpGet]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<CategoryVM> GetDataWithPagination([FromQuery] PaginationRequest request)
         {
             return CategoryServices.GetDataWithPagination(request);
@@ -36,7 +39,8 @@ namespace IssueTracker.Controllers.Api
         /// </summary>
         [HttpPost]
         [Route("search")]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<CategoryVM> SearchDataWithPagination([FromBody] SearchPaginationRequest<CategoryVM> request)
         {
             return CategoryServices.SearchDataWithPagination(request);
@@ -46,7 +50,8 @@ namespace IssueTracker.Controllers.Api
         /// Save New Category Data
         /// </summary>
         [HttpPost]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<CategoryVM> SaveNewData([FromBody] CategoryVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA
@@ -64,7 +69,8 @@ namespace IssueTracker.Controllers.Api
         /// Change New Category Data
         /// </summary>
         [HttpPut]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<CategoryVM> UpdateData([FromBody] CategoryVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA
@@ -82,7 +88,8 @@ namespace IssueTracker.Controllers.Api
         /// Delete Category Data
         /// </summary>
         [HttpDelete]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<CategoryVM> DeleteData([FromBody] CategoryVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA

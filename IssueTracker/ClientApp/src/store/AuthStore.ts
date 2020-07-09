@@ -1,18 +1,19 @@
 ﻿import { Action, Reducer } from 'redux';
 import { AppThunkAction } from '.';
-import MessageResponseModel from './shared/MessageResponseModel';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 
 export interface LoginState {
-    data: LoginItemContainer & MessageResponseModel
+    data: LoginItem
+    code: string
+    status: boolean
+    message: string
 }
-
-export interface LoginItemContainer { data: LoginItem }
 
 export interface LoginItem {
     id: string
     name: string
     email: string
+    image: string
     token: string
 }
 
@@ -28,10 +29,11 @@ interface RequestLogoutAction {
 
 interface ReceiveLoginAction {
     type: 'RECEIVE_LOGIN'
-    data: LoginItemContainer & MessageResponseModel
+    data: LoginState
 }
 
-type KnownAction = RequestLoginAction | ReceiveLoginAction | StartLoadingAction | EndLoadingAction | RequestLogoutAction;
+type KnownAction = RequestLoginAction | ReceiveLoginAction | StartLoadingAction | EndLoadingAction
+    | RequestLogoutAction;
 
 export const actionCreators = {
     requestLogin: (email: string, password: string):
@@ -42,8 +44,9 @@ export const actionCreators = {
             if (
                 appState &&
                 appState.authStore &&
-                appState.authStore.data.data.token === null
+                (appState.authStore.data.token == null || appState.authStore.data.token == undefined)
             ) {
+
                 const requestData = {
                     email: email,
                     password: password,
@@ -58,10 +61,10 @@ export const actionCreators = {
                     body: JSON.stringify(requestData)
                 })
                 .then(
-                    response => response.json() as Promise<MessageResponseModel & LoginItemContainer>
+                    response => response.json() as Promise<LoginState>
                 )
                 .then(data => {
-                    dispatch({ type: 'RECEIVE_LOGIN', data: data });
+                    dispatch({ type: 'RECEIVE_LOGIN', data: { ...data } });
                     dispatch({ type: 'END_LOADING' });
                 })
                 .catch(exception => {
@@ -76,28 +79,41 @@ export const actionCreators = {
     requestLogout: ():
         AppThunkAction<KnownAction> => (dispatch, getState) => {
 
-            const appState = getState();
-
+            dispatch({ type: 'REQUEST_LOGOUT' });
         },
 };
 
 const unloadedState: LoginState = {
     data: {
-        status: false,
-        code: '',
-        message: '',
-        data: {
-            name: null,
-            email: null,
-            token: null,
-            id: null,
-        }
-    }
+        name: null,
+        email: null,
+        token: null,
+        image: null,
+        id: null,
+    },
+    code: null,
+    message: null,
+    status: true,
 };
+
+const LOCAL_STORAGE_KEY = "ISSUE_TRACKER_USER";
 
 export const reducer: Reducer<LoginState> = (
     state: LoginState | undefined, incomingAction: Action): LoginState => {
-    if (state === undefined) {
+    if (state === undefined)
+    {
+        let currentUser = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+        if (currentUser !== null)
+        {
+            let userData = JSON.parse(currentUser);
+
+            if (userData.name && userData.email && userData.token)
+            {
+                return { ...unloadedState, data: userData }
+            }
+        }
+
         return unloadedState;
     }
 
@@ -109,33 +125,34 @@ export const reducer: Reducer<LoginState> = (
         case 'REQUEST_LOGIN':
 
             newState = {
-                isLoading: true
-            };
+                ...state
+            }
 
-            return { ...state, ...newState };
+            return newState
 
         case 'REQUEST_LOGOUT':
 
-            newState = {
-                data: {
-                    name: null,
-                    email: null,
-                    token: null,
-                    id: null,
-                }
-            };
+            newState = { ...unloadedState }
 
-            return { ...state, ...newState };
+            localStorage.removeItem(LOCAL_STORAGE_KEY)
+
+            return newState
 
         case 'RECEIVE_LOGIN':
 
             newState = {
-                data: action.data,
-                isLoading: false
-            };
+                ...state,
+                ...action.data,
+            }
 
-            return { ...state, ...newState }
+            localStorage.setItem(
+                LOCAL_STORAGE_KEY,
+                JSON.stringify(action.data.data)
+            )
+
+            return newState
+
+        default:
+            return state;
     }
-
-    return state;
 };

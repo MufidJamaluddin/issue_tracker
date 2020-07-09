@@ -73,7 +73,8 @@ export const actionCreators = {
                     method: 'POST',
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })

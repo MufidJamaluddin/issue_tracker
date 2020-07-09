@@ -31,17 +31,23 @@ export const actionCreators = {
                 appState.ticketStatusStore &&
                 appState.ticketStatusStore.data === null
             ) {
-                fetch(`api/ticketstatus`)
-                    .then(
-                        response => response.json() as Promise<TicketStatusItem[]>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_TICKETSTATUS', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
+                fetch(`api/ticketstatus`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                    },
+                })
+                .then(
+                    response => response.json() as Promise<TicketStatusItem[]>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_TICKETSTATUS', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
 
                 dispatch({ type: 'START_LOADING' });
             }

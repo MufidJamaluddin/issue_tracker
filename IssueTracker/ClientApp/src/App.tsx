@@ -11,10 +11,12 @@ import './custom.css';
 import 'font-awesome/css/font-awesome.min.css';
 import CLoading from './components/shared/CLoading';
 
-const AppInner = (props: { droutes: RoutesItem[], dmenus: MenuItem[] }): JSX.Element => {
+import NeedAuth from './components/shared/NeedAuth';
+
+const AppInner = (props: { droutes: RoutesItem[], dmenus: MenuItem[], requireLogin: boolean }): JSX.Element => {
 
     return (
-        <>
+        <NeedAuth requireLogin={props.requireLogin} {...props}>
             <CLoading />
             <NavMenu menus={props.dmenus} />
             <Switch>
@@ -31,17 +33,23 @@ const AppInner = (props: { droutes: RoutesItem[], dmenus: MenuItem[] }): JSX.Ele
                     })
                 }
             </Switch>
-        </>
+        </NeedAuth>
    )
 }
 
 const DashboardApp = (props) => <AppInner 
     droutes={DashboardRoutes}
-    dmenus={DashboardMenus} />
+    dmenus={DashboardMenus}
+    requireLogin={false}
+    {...props}
+/>
 
 const PublicApp = (props) => <AppInner
     droutes={PublicRoutes}
-    dmenus={PublicMenus} />
+    dmenus={PublicMenus}
+    requireLogin={false}
+    {...props}
+/>
 
 class App extends React.Component
 {

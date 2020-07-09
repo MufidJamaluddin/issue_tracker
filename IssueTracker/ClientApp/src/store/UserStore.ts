@@ -43,46 +43,6 @@ type KnownAction = RequestUserAction | ReceiveUserAction | StartLoadingAction | 
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestUser: (page: number, size: number):
-        AppThunkAction<KnownAction> => (dispatch, getState) => {
-
-            const appState = getState();
-
-            if (
-                appState &&
-                appState.userStore &&
-                (
-                    page !== appState.userStore.data.page ||
-                    appState.userStore.data.code === ''
-                )
-            ) {
-                /*
-                let request: RequestInit = {
-                    method: 'GET',
-                    body: JSON.stringify({
-                        page: page,
-                        size: size,
-                        orderdirection: 'asc',
-                        orderby: 'id',
-                    })
-                };
-                */
-                fetch(`api/user?page=${page}&size=${size}`)
-                    .then(
-                        response => response.json() as Promise<PaginationResponseModel<UserItem> & MessageResponseModel>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_USER', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
-
-                dispatch({ type: 'START_LOADING' });
-                dispatch({ type: 'REQUEST_USER', page: page, size: size });
-            }
-        },
 
     searchUser: (page: number, size: number, data: UserItem):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -106,7 +66,8 @@ export const actionCreators = {
                     method: 'POST',
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })

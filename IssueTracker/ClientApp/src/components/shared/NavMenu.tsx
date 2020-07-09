@@ -1,15 +1,28 @@
 import * as React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, DropdownItem, DropdownMenu, Dropdown, DropdownToggle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import './NavMenu.css';
+import { connect } from 'react-redux';
+import MenuItem from '../../menus';
 
-export default class NavMenu extends React.PureComponent<{ menus: any[] }, { isOpen: boolean }> {
+import { ApplicationState } from '../../store';
+import * as AuthStore from '../../store/AuthStore';
+
+import ProfileMenu from './ProfileMenu'
+
+type NavMenuProps = AuthStore.LoginState
+    & typeof AuthStore.actionCreators
+    & { menus: MenuItem[] } 
+
+class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean }>
+{
     public state = {
         isOpen: false
     };
 
-    public render() {
+    public render(): JSX.Element
+    {
         return (
             <header>
                 <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light>
@@ -29,6 +42,10 @@ export default class NavMenu extends React.PureComponent<{ menus: any[] }, { isO
                                         )
                                     })
                                 }
+
+                                {
+                                    this.renderProfile()
+                                }
                             </ul>
                         </Collapse>
                     </Container>
@@ -37,9 +54,29 @@ export default class NavMenu extends React.PureComponent<{ menus: any[] }, { isO
         );
     }
 
-    private toggle = () => {
+    private renderProfile(): JSX.Element
+    {
+        if (this.props.data.token == null)
+            return (null);
+        else
+            return (
+                <ProfileMenu
+                    name={this.props.data.name}
+                    email={this.props.data.email}
+                    image={this.props.data.image}
+                />
+            );
+    }
+
+    private toggle(): void
+    {
         this.setState({
             isOpen: !this.state.isOpen
         });
     }
 }
+
+export default connect(
+    (state: ApplicationState) => state.authStore,
+    AuthStore.actionCreators
+)(NavMenu)

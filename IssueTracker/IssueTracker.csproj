@@ -52,6 +52,8 @@
     <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketDetail.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\User\UserDetail.tsx" />
     <None Remove="ClientApp\src\components\shared\CLoading.tsx" />
+    <None Remove="ClientApp\src\components\shared\NeedAuth.tsx" />
+    <None Remove="ClientApp\src\components\shared\ProfileMenu.tsx" />
     <None Remove="ClientApp\src\components\Ticket.tsx" />
     <None Remove="ClientApp\src\components\User.tsx" />
     <None Remove="ClientApp\src\menus.ts" />
@@ -93,6 +95,8 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\shared\CLoading.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\shared\NeedAuth.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\shared\ProfileMenu.tsx" />
     <TypeScriptCompile Include="ClientApp\src\menus.ts" />
     <TypeScriptCompile Include="ClientApp\src\monthtexter.ts" />
     <TypeScriptCompile Include="ClientApp\src\routes.tsx" />

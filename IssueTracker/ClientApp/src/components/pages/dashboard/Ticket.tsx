@@ -59,6 +59,8 @@ class Ticket extends React.PureComponent<TicketProps>
         this.props.searchTicket(requestedPage, this.props.data.size, searchedData);
     }
 
+    public 
+
     public render(): JSX.Element {
         return (
             <Container>
@@ -128,6 +130,10 @@ class Ticket extends React.PureComponent<TicketProps>
                     </Col>
 
                     <Col md="2">
+                        <Button type="reset" color="light">
+                            <span><i className="fa fa-times" /></span>
+                        </Button>
+                        {' '}
                         <Button type="submit" color="light">
                             <span><i className="fa fa-search" /></span>
                         </Button>

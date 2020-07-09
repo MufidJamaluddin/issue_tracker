@@ -1,6 +1,8 @@
-﻿using IssueTracker.Models.ViewModels;
+﻿using IssueTracker.Models;
+using IssueTracker.Models.ViewModels;
 using IssueTracker.Models.ViewModels.Shared;
 using IssueTracker.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /**
@@ -25,7 +27,8 @@ namespace IssueTracker.Controllers.Api
         /// Get Ticket Data with Pagination
         /// </summary>
         [HttpGet]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<TicketVM> GetDataWithPagination([FromQuery] PaginationRequest request)
         {
             return TicketServices.GetDataWithPagination(request);
@@ -36,7 +39,8 @@ namespace IssueTracker.Controllers.Api
         /// </summary>
         [HttpPost]
         [Route("search")]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public PaginationResponse<TicketVM> SearchDataWithPagination([FromBody] SearchPaginationRequest<TicketVM> request)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA
@@ -56,7 +60,8 @@ namespace IssueTracker.Controllers.Api
         /// Save New Ticket Data
         /// </summary>
         [HttpPost]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<TicketVM> SaveNewData([FromBody] TicketVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA
@@ -79,7 +84,8 @@ namespace IssueTracker.Controllers.Api
         /// Change Ticket Data
         /// </summary>
         [HttpPut]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<TicketVM> UpdateData([FromBody] TicketVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA
@@ -97,7 +103,8 @@ namespace IssueTracker.Controllers.Api
         /// Delete Ticket Data
         /// </summary>
         [HttpDelete]
-        //[Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Policy = RolePolicy.ProductOwner)]
         public CommonResponse<TicketVM> DeleteData([FromBody] TicketVM data)
         {
             string myUserId = User.FindFirst("id")?.Value ?? "USR-001"; // SEMENTARA

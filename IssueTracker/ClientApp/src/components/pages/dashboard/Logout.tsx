@@ -2,22 +2,38 @@
 import { withRouter, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 
-class Logout extends React.PureComponent<RouteComponentProps<any>> {
+import { ApplicationState } from '../../../store';
+import * as AuthStore from '../../../store/AuthStore';
 
-    redirectToHome = () => {
+type LogoutProps = AuthStore.LoginState & typeof AuthStore.actionCreators & RouteComponentProps<any>
+
+class Logout extends React.PureComponent<LogoutProps>
+{
+    private redirectToHome(): void
+    {
         this.props.history.push(`/`)
     }
 
-    render(): JSX.Element
+    public render(): JSX.Element
     {
         return (null);
     }
 
-    componentDidMount()
+    public componentDidMount(): void
     {
-        this.redirectToHome()
+        if (this.props.data.token === null)
+        {
+            this.redirectToHome()
+        }
+        else
+        {
+            this.props.requestLogout()
+        }
     }
 
 }
 
-export default withRouter(connect()(Logout));
+export default withRouter(connect(
+    (state: ApplicationState) => state.authStore,
+    AuthStore.actionCreators
+)(Logout as any))

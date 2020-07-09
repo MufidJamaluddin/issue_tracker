@@ -41,35 +41,6 @@ type KnownAction = RequestCategoryAction | ReceiveCategoryAction | StartLoadingA
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
-    requestCategory: (page: number, size: number):
-        AppThunkAction<KnownAction> => (dispatch, getState) => {
-
-            const appState = getState();
-
-            if (
-                appState &&
-                appState.categoryStore &&
-                (
-                    page !== appState.categoryStore.data.page ||
-                    appState.categoryStore.data.code === ''
-                )
-            ) {
-                fetch(`api/category?page=${page}&size=${size}&orderdirection=asc`)
-                    .then(
-                        response => response.json() as Promise<PaginationResponseModel<CategoryItem> & MessageResponseModel>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_CATEGORY', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
-
-                dispatch({ type: 'START_LOADING' });
-                dispatch({ type: 'REQUEST_CATEGORY', page: page, size: size });
-            }
-        },
 
     searchCategory: (page: number, size: number, data: CategoryItem):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -94,7 +65,8 @@ export const actionCreators = {
                     method: 'POST',
                     cache: 'no-cache',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })

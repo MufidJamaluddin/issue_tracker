@@ -23,12 +23,16 @@ class Category extends React.PureComponent<CategoryProps>
     public componentDidMount()
     {
         const requestedPage = this.props.data.page || 1;
-        this.props.requestCategory(requestedPage, this.props.data.size);
+        this.props.searchCategory(requestedPage, this.props.data.size, {
+            id: '', name: ''
+        });
     }
     
     private changePage(selectedItem: { selected: number })
     {
-        this.props.requestCategory(selectedItem.selected + 1, this.props.data.size)
+        this.props.searchCategory(selectedItem.selected + 1, this.props.data.size, {
+            id: '', name: ''
+        })
     }
 
     public render(): JSX.Element

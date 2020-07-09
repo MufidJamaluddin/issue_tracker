@@ -27,7 +27,7 @@ class SelectTicketStatuses extends React.PureComponent<{
                 id={this.props.id}
                 defaultValue={this.props.defaultValue}
             >
-                <option value={null}>All Status</option>
+                <option key="0" value={''}>All Status</option>
                 {
                     this.props.data &&
                     this.props.data.map(item => {
