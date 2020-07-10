@@ -16,10 +16,6 @@ const DashboardMenus: MenuItem[] = [
         url: '/dashboard/user',
         name: 'User'
     },
-    {
-        url: '/logout',
-        name: 'Logout'
-    }
 ];
 
 const PublicMenus: MenuItem[] = [
@@ -28,8 +24,8 @@ const PublicMenus: MenuItem[] = [
         name: 'Home',
     },
     {
-        url: '/login',
-        name: 'Login'
+        url: '/dashboard',
+        name: 'App Panel'
     },
 ]
 

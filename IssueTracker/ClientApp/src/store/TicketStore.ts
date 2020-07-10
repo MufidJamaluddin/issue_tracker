@@ -41,16 +41,26 @@ interface ReceiveTicketAction {
     data: PaginationResponseModel<TicketItem> & MessageResponseModel
 }
 
+interface ClearSearchTicketAction {
+    type: 'CLEAR_SEARCH_TICKET'
+}
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 
-type KnownAction = RequestTicketAction | ReceiveTicketAction | StartLoadingAction | EndLoadingAction;
+type KnownAction = RequestTicketAction | ReceiveTicketAction
+    | StartLoadingAction | EndLoadingAction | ClearSearchTicketAction
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
+
+    clearSearchTicket: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+            dispatch({ type: 'CLEAR_SEARCH_TICKET' })
+        },
 
     searchTicket: (page: number, size: number, data: TicketItem|any):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
@@ -126,7 +136,11 @@ export const reducer: Reducer<TicketState> = (
     }
 
     const action = incomingAction as KnownAction;
-    switch (action.type) {
+
+    let newState = null;
+
+    switch (action.type)
+    {
         case 'REQUEST_TICKET':
 
             let data = state.data
@@ -134,7 +148,7 @@ export const reducer: Reducer<TicketState> = (
             data.size = action.size
             data.data = []
 
-            let newState = {
+            newState = {
                 data: data,
                 isLoading: true,
                 searchedData: action.searchedData,
@@ -146,7 +160,7 @@ export const reducer: Reducer<TicketState> = (
 
             if (action.data.page === state.data.page)
             {
-                let newState = {
+                newState = {
                     data: action.data,
                     isLoading: false
                 }
@@ -154,6 +168,15 @@ export const reducer: Reducer<TicketState> = (
                 return { ...state, ...newState }
             }
             break;
+
+        case 'CLEAR_SEARCH_TICKET':
+
+            newState = {
+                searchedData: unloadedState.searchedData,
+                isLoading: false
+            };
+
+            return { ...state, ...newState }
     }
 
     return state;

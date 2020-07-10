@@ -5,6 +5,7 @@ using IssueTracker.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 /**
  * 
@@ -28,8 +29,7 @@ namespace IssueTracker.Controllers.Api
         /// Get All Ticket Status Data
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolePolicy.User)]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public IEnumerable<TicketStatusVM> GetAllData()
         {
             return TicketStatusServices.GetAllData();
@@ -39,10 +39,10 @@ namespace IssueTracker.Controllers.Api
         /// Save New Ticket Status Data
         /// </summary>
         [HttpPost]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<TicketStatusVM> SaveNewData([FromBody] TicketStatusVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {
@@ -57,10 +57,10 @@ namespace IssueTracker.Controllers.Api
         /// Change Ticket Data
         /// </summary>
         [HttpPut]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<TicketStatusVM> UpdateData([FromBody] TicketStatusVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {
@@ -75,10 +75,10 @@ namespace IssueTracker.Controllers.Api
         /// Delete Ticket Data
         /// </summary>
         [HttpDelete]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<TicketStatusVM> DeleteData([FromBody] TicketStatusVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {

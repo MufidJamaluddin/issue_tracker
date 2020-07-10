@@ -10,5 +10,7 @@ namespace IssueTracker.Helpers
         public string Secret { get; set; }
         public bool UseHttps { get; set; }
         public bool SensitiveDataLogging { get; set; }
+        public string JwtIssuer { get; set; }
+        public string JwtAudience { get; set; }
     }
 }

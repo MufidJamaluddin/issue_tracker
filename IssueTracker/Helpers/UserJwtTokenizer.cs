@@ -9,7 +9,7 @@ namespace IssueTracker.Helpers
 {
     public static class UserJwtTokenizer
     {
-        public static string GenerateJwtToken(this UserVM user, string secretKey)
+        public static string GenerateJwtToken(this UserVM user, string secretKey, AppConfig config)
         {
             if (user == null)
             {
@@ -23,22 +23,24 @@ namespace IssueTracker.Helpers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(
-                        "id",
+                        ClaimTypes.Name,
                         user.Id
                     ),
                     new Claim(
-                        "email",
+                        ClaimTypes.Email,
                         user.Email
                     ),
                     new Claim(
-                        "role",
+                        ClaimTypes.Role,
                         user.Role
                     )
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature
-                )
+                ),
+                Issuer = config?.JwtIssuer,
+                Audience = config?.JwtAudience,
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);

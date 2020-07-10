@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace IssueTracker.Models
 {
@@ -10,12 +11,22 @@ namespace IssueTracker.Models
 
         public static AuthorizationPolicy UserPolicy()
         {
-            return new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole(User).Build();
+            return new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                    context.User.HasClaim(ClaimTypes.Role, User)
+                )
+                .Build();
         }
 
         public static AuthorizationPolicy ProductOwnerPolicy()
         {
-            return new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole(ProductOwner).Build();
+            return new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                    context.User.HasClaim(ClaimTypes.Role, ProductOwner)
+                )
+                .Build();
         }
     }
 }

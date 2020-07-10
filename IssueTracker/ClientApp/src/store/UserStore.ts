@@ -10,12 +10,15 @@ import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 export interface UserState {
     isLoading: boolean
     data: PaginationResponseModel<UserItem> & MessageResponseModel
+    searchedData: UserItem
 }
 
 export interface UserItem {
     id: string
     name: string
     email: string
+    image?: string
+    role?: string
 }
 
 // -----------------
@@ -26,6 +29,7 @@ interface RequestUserAction {
     type: 'REQUEST_USER'
     page: number
     size: number
+    searchedData: UserItem
 }
 
 interface ReceiveUserAction {
@@ -33,10 +37,15 @@ interface ReceiveUserAction {
     data: PaginationResponseModel<UserItem> & MessageResponseModel
 }
 
+interface ClearSearchUserAction {
+    type: 'CLEAR_SEARCH_USER'
+}
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 
-type KnownAction = RequestUserAction | ReceiveUserAction | StartLoadingAction | EndLoadingAction;
+type KnownAction = RequestUserAction | ReceiveUserAction
+    | StartLoadingAction | EndLoadingAction | ClearSearchUserAction
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -44,7 +53,12 @@ type KnownAction = RequestUserAction | ReceiveUserAction | StartLoadingAction | 
 
 export const actionCreators = {
 
-    searchUser: (page: number, size: number, data: UserItem):
+    clearSearchUser: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+            dispatch({ type: 'CLEAR_SEARCH_USER' })
+        },
+
+    searchUser: (page: number, size: number, searchdata: UserItem):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
 
             const appState = getState();
@@ -52,10 +66,10 @@ export const actionCreators = {
             if (
                 appState &&
                 appState.categoryStore &&
-                data != null
+                searchdata != null
             ) {
                 const requestData = {
-                    searchData: data,
+                    searchData: searchdata,
                     page: page,
                     size: size,
                     orderBy: 'id',
@@ -83,7 +97,7 @@ export const actionCreators = {
                 });
 
                 dispatch({ type: 'START_LOADING' });
-                dispatch({ type: 'REQUEST_USER', page: page, size: size });
+                dispatch({ type: 'REQUEST_USER', page: page, size: size, searchedData: searchdata });
             }
         }
 };
@@ -98,9 +112,15 @@ const unloadedState: UserState = {
         code: '',
         message: '',
         data: [],
-        size: 10,
+        size: 5,
         page: 1,
         totalPages: 1,
+    },
+    searchedData: {
+        id: '',
+        email: '',
+        name: '',
+        role: '',
     }
 };
 
@@ -111,6 +131,9 @@ export const reducer: Reducer<UserState> = (
     }
 
     const action = incomingAction as KnownAction;
+
+    let newState = null
+
     switch (action.type) {
         case 'REQUEST_USER':
 
@@ -119,25 +142,32 @@ export const reducer: Reducer<UserState> = (
             data.size = action.size
             data.data = []
 
-            let newState = {
+            newState = {
                 data: data,
-                isLoading: true
+                isLoading: true,
+                searchedData: action.searchedData,
             }
 
             return { ...state, ...newState }
 
         case 'RECEIVE_USER':
 
-            if (action.data.page === state.data.page)
-            {
-                let newState = {
-                    data: action.data,
-                    isLoading: false
-                }
-
-                return { ...state, ...newState }
+            newState = {
+                data: action.data,
+                isLoading: false
             }
-            break;
+
+            return { ...state, ...newState }
+
+
+        case 'CLEAR_SEARCH_USER':
+
+            newState = {
+                searchedData: unloadedState.searchedData,
+                isLoading: false
+            };
+
+            return { ...state, ...newState }
     }
 
     return state;

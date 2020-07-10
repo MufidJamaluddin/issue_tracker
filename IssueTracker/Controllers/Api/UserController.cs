@@ -4,6 +4,7 @@ using IssueTracker.Models.ViewModels.Shared;
 using IssueTracker.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 /**
  * 
@@ -27,8 +28,7 @@ namespace IssueTracker.Controllers.Api
         /// Get User Data with Pagination
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolePolicy.User)]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public PaginationResponse<UserVM> GetDataWithPagination([FromQuery] PaginationRequest request)
         {
             return UserServices.GetDataWithPagination(request);
@@ -39,8 +39,7 @@ namespace IssueTracker.Controllers.Api
         /// </summary>
         [HttpPost]
         [Route("search")]
-        [Authorize(Policy = RolePolicy.User)]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public PaginationResponse<UserVM> SearchDataWithPagination([FromBody] SearchPaginationRequest<UserVM> request)
         {
             return UserServices.SearchDataWithPagination(request);
@@ -50,10 +49,10 @@ namespace IssueTracker.Controllers.Api
         /// Save New User Data
         /// </summary>
         [HttpPost]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<UserVM> SaveNewData(UserVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {
@@ -68,10 +67,10 @@ namespace IssueTracker.Controllers.Api
         /// Change User Data
         /// </summary>
         [HttpPut]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<UserVM> UpdateData([FromBody] UserVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {
@@ -86,10 +85,10 @@ namespace IssueTracker.Controllers.Api
         /// Delete User Data
         /// </summary>
         [HttpDelete]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
+        [Authorize(Roles = RolePolicy.ProductOwner)]
         public CommonResponse<UserVM> DeleteData([FromBody] UserVM data)
         {
-            string myUserId = User.FindFirst("id").Value;
+            string myUserId = User.FindFirst(ClaimTypes.Name)?.Value;
 
             TableTransactionVM transaction = new TableTransactionVM
             {

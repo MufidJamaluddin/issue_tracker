@@ -39,3 +39,7 @@ body, .root {
 .thin-padding-right {
     padding-right: 2px;
 }
+
+.modal-image {
+    max-height: 53px;
+}

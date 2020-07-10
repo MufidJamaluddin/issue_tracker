@@ -51,6 +51,7 @@ namespace IssueTracker.Models.Repositories
             string email = request?.SearchData?.Email;
             string id = request?.SearchData?.Id;
             string name = request?.SearchData?.Name;
+            string role = request?.SearchData?.Role;
 
             if (!string.IsNullOrEmpty(email))
             {
@@ -65,6 +66,11 @@ namespace IssueTracker.Models.Repositories
             if (!string.IsNullOrEmpty(name))
             {
                 model = model.Where(u => u.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                model = model.Where(u => u.Role.Contains(role));
             }
 
             return model;

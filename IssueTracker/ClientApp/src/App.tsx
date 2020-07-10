@@ -18,7 +18,7 @@ const AppInner = (props: { droutes: RoutesItem[], dmenus: MenuItem[], requireLog
     return (
         <NeedAuth requireLogin={props.requireLogin} {...props}>
             <CLoading />
-            <NavMenu menus={props.dmenus} />
+            <NavMenu menus={props.dmenus} logout_path='/logout'/>
             <Switch>
                 {
                     props.droutes.map((item, index) => {

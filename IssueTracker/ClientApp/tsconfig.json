@@ -17,9 +17,13 @@
       "ES2015.Core",
       "dom"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": [ "node_modules/@types" ]
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

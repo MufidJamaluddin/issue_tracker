@@ -7,8 +7,10 @@ import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
-export interface CategoryState {
-    data: PaginationResponseModel<CategoryItem> & MessageResponseModel
+export interface CategoryState
+{
+    data: PaginationResponseModel<CategoryItem> & MessageResponseModel,
+    searchedData: CategoryItem
 }
 
 export interface CategoryItem {
@@ -24,6 +26,7 @@ interface RequestCategoryAction {
     type: 'REQUEST_CATEGORY'
     page: number
     size: number
+    searchedData: CategoryItem
 }
 
 interface ReceiveCategoryAction {
@@ -31,10 +34,15 @@ interface ReceiveCategoryAction {
     data: PaginationResponseModel<CategoryItem> & MessageResponseModel
 }
 
+interface ClearSearchCategoryAction {
+    type: 'CLEAR_SEARCH_CATEGORY'
+}
+
 // Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
 // declared type strings (and not any other arbitrary string).
 
-type KnownAction = RequestCategoryAction | ReceiveCategoryAction | StartLoadingAction | EndLoadingAction;
+type KnownAction = RequestCategoryAction | ReceiveCategoryAction
+    | StartLoadingAction | EndLoadingAction | ClearSearchCategoryAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -42,7 +50,12 @@ type KnownAction = RequestCategoryAction | ReceiveCategoryAction | StartLoadingA
 
 export const actionCreators = {
 
-    searchCategory: (page: number, size: number, data: CategoryItem):
+    clearSearchCategory: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+            dispatch({ type: 'CLEAR_SEARCH_CATEGORY' })
+        },
+
+    searchCategory: (page: number, size: number, searchedData: CategoryItem | any):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
 
             const appState = getState();
@@ -50,11 +63,11 @@ export const actionCreators = {
             if (
                 appState &&
                 appState.categoryStore &&
-                data != null
+                searchedData != null
             )
             {
                 const requestData = {
-                    searchData: data,
+                    searchData: searchedData,
                     page: page,
                     size: size,
                     orderBy: 'id',
@@ -82,7 +95,7 @@ export const actionCreators = {
                 });
 
                 dispatch({ type: 'START_LOADING' });
-                dispatch({ type: 'REQUEST_CATEGORY', page: page, size: size });
+                dispatch({ type: 'REQUEST_CATEGORY', page: page, size: size, searchedData: searchedData });
             }
 
         }
@@ -100,6 +113,10 @@ const unloadedState: CategoryState = {
         size: 10,
         page: 1,
         totalPages: 1,
+    },
+    searchedData: {
+        id: '',
+        name: '',
     }
 };
 
@@ -112,6 +129,8 @@ export const reducer: Reducer<CategoryState> = (
 
     const action = incomingAction as KnownAction;
 
+    let newState = null;
+
     switch (action.type) {
         case 'REQUEST_CATEGORY':
 
@@ -120,10 +139,11 @@ export const reducer: Reducer<CategoryState> = (
             data.size = action.size
             data.data = []
 
-            let newState = {
+            newState = {
                 data: data,
-                isLoading: true
-            };
+                isLoading: true,
+                searchedData: action.searchedData,
+            }
 
             return { ...state, ...newState };
 
@@ -131,14 +151,23 @@ export const reducer: Reducer<CategoryState> = (
 
             if (action.data.page === state.data.page) {
 
-                let newState = {
+                newState = {
                     data: action.data,
                     isLoading: false
-                };
+                }
 
                 return { ...state, ...newState }
             }
             break;
+
+        case 'CLEAR_SEARCH_CATEGORY':
+
+            newState = {
+                searchedData: unloadedState.searchedData,
+                isLoading: false
+            };
+
+            return { ...state, ...newState }
     }
 
     return state;

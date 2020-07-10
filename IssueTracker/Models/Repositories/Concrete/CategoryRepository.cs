@@ -2,8 +2,10 @@
 using IssueTracker.Models.Datas.Schemas;
 using IssueTracker.Models.ViewModels;
 using IssueTracker.Models.ViewModels.Shared;
+using System;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace IssueTracker.Models.Repositories
 {
@@ -11,13 +13,18 @@ namespace IssueTracker.Models.Repositories
     {
         public CategoryRepository(IssueTrackerDbContext dbContext) : base(dbContext) { }
 
+        public Expression<Func<Category, CategoryVM>> MapVM()
+        {
+            return (category) => new CategoryVM
+            {
+                Id = category.Id,
+                Name = category.Name,
+            };
+        }
+
         public override IQueryable<CategoryVM> GetModel()
         {
-            IQueryable<CategoryVM> model = DbContext.Categories.Select(u => new CategoryVM
-            {
-                Id = u.Id,
-                Name = u.Name,
-            });
+            IQueryable<CategoryVM> model = DbContext.Categories.Select(this.MapVM());
 
             return model;
         }

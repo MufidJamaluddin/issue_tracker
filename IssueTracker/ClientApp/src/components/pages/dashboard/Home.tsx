@@ -2,10 +2,18 @@
 import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
 
-const Home = () => (
+import { ApplicationState } from '../../../store';
+import * as AuthStore from '../../../store/AuthStore';
+
+type HomeProps = AuthStore.LoginState & typeof AuthStore.actionCreators;
+
+const Home = (props: HomeProps) => (
     <Container>
-        <h1>Welcome, Mufid!</h1>
+        <h1>Welcome, {props.data.name}!</h1>
     </Container>
 );
 
-export default connect()(Home);
+export default connect(
+    (state: ApplicationState) => state.authStore,
+    AuthStore.actionCreators
+)(Home);

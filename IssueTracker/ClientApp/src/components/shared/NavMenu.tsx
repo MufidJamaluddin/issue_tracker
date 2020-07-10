@@ -13,7 +13,7 @@ import ProfileMenu from './ProfileMenu'
 
 type NavMenuProps = AuthStore.LoginState
     & typeof AuthStore.actionCreators
-    & { menus: MenuItem[] } 
+    & { menus: MenuItem[], logout_path: string } 
 
 class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean }>
 {
@@ -64,6 +64,7 @@ class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean }>
                     name={this.props.data.name}
                     email={this.props.data.email}
                     image={this.props.data.image}
+                    logout_path={this.props.logout_path}
                 />
             );
     }

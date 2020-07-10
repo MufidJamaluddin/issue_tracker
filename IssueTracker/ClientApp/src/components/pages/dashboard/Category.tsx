@@ -4,8 +4,11 @@ import ReactPaginate from 'react-paginate'
 import { connect } from 'react-redux'
 import { ApplicationState } from '../../../store'
 import * as CategoryStore from '../../../store/CategoryStore'
-import { RouteComponentProps, withRouter, generatePath } from 'react-router'
+import { withRouter, generatePath } from 'react-router'
 import { Table, Col, Container, PaginationLink, Button, Progress, Row } from 'reactstrap'
+import { compose } from 'redux'
+
+import CategorySearchForm from './Category/CategorySearchForm'
 
 type CategoryProps =
     CategoryStore.CategoryState
@@ -18,21 +21,33 @@ class Category extends React.PureComponent<CategoryProps>
         super(props);
 
         this.changePage = this.changePage.bind(this)
+        this.onSearchSubmit = this.onSearchSubmit.bind(this)
     }
     
     public componentDidMount()
     {
         const requestedPage = this.props.data.page || 1;
-        this.props.searchCategory(requestedPage, this.props.data.size, {
-            id: '', name: ''
-        });
+        this.props.searchCategory(requestedPage, this.props.data.size, this.props.searchedData);
     }
     
     private changePage(selectedItem: { selected: number })
     {
-        this.props.searchCategory(selectedItem.selected + 1, this.props.data.size, {
-            id: '', name: ''
-        })
+        this.props.searchCategory(selectedItem.selected + 1, this.props.data.size, this.props.searchedData)
+    }
+
+    public onSearchSubmit(event: React.FormEvent<HTMLFormElement> | any)
+    {
+        event.preventDefault();
+
+        const data = new FormData(event.target);
+
+        const searchedData = {
+            id: data.get('id').toString(),
+            name: data.get('name').toString(),
+        }
+
+        const requestedPage = this.props.data.page || 1;
+        this.props.searchCategory(requestedPage, this.props.data.size, searchedData);
     }
 
     public render(): JSX.Element
@@ -40,6 +55,11 @@ class Category extends React.PureComponent<CategoryProps>
         return (
             <Container>
                 <h1 className="text-center">Category</h1>
+                <CategorySearchForm
+                    onSubmit={this.onSearchSubmit}
+                    searchData={this.props.searchedData}
+                    onClear={this.props.clearSearchCategory}
+                />
                 {
                     this.renderTableSection()
                 }
@@ -110,7 +130,10 @@ class Category extends React.PureComponent<CategoryProps>
     }
 }
 
-export default withRouter(connect(
-    (state: ApplicationState) => state.categoryStore, // Selects which state properties are merged into the component's props
-    CategoryStore.actionCreators // Selects which action creators are merged into the component's props
-)(Category as any));
+export default compose(
+    withRouter,
+    connect(
+        (state: ApplicationState) => state.categoryStore, // Selects which state properties are merged into the component's props
+        CategoryStore.actionCreators // Selects which action creators are merged into the component's props
+    )
+)(Category as any);

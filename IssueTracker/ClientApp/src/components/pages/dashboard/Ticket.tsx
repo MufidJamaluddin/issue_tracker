@@ -6,10 +6,12 @@ import { ApplicationState } from '../../../store'
 import * as TicketStore from '../../../store/TicketStore'
 
 import { withRouter } from 'react-router'
-import { Table, Col, Container, PaginationLink, Button, Row, Form, FormGroup, Label, Input } from 'reactstrap'
-import SelectTicketStatuses from './Ticket/SelectTicketStatuses'
+import { Table, Col, Container, PaginationLink, Button, Row } from 'reactstrap'
 
-import { getMonthName } from './../../../monthtexter';
+import TicketSearchForm from './Ticket/TicketSearchForm'
+
+import { getMonthName } from './../../../monthtexter'
+import { compose } from 'redux'
 
 /**
  *  Ticket Component
@@ -43,7 +45,7 @@ class Ticket extends React.PureComponent<TicketProps>
         this.props.searchTicket(selectedItem.selected + 1, this.props.data.size, this.props.searchedData)
     }
 
-    public onSearchSubmit(event)
+    public onSearchSubmit(event: React.FormEvent<HTMLFormElement> | any)
     {
         event.preventDefault();
 
@@ -53,95 +55,33 @@ class Ticket extends React.PureComponent<TicketProps>
             name: data.get('name').toString(),
             see: parseInt(data.get('see').toString()),
             status_id: data.get('status_id').toString(),
-        };
+        }
 
         const requestedPage = this.props.data.page || 1;
         this.props.searchTicket(requestedPage, this.props.data.size, searchedData);
     }
 
-    public 
+    public render(): JSX.Element
+    {
+        let searchedData = {
+            name: this.props.searchedData.name,
+            see: parseInt(this.props.searchedData.see),
+            status_id: this.props.searchedData.status_id,
+        };
 
-    public render(): JSX.Element {
         return (
             <Container>
                 <h1 className="text-center">Ticket</h1>
-                {
-                    this.renderSearchForm()
-                }
+                <TicketSearchForm
+                    onSubmit={this.onSearchSubmit}
+                    searchData={searchedData}
+                    onClear={this.props.clearSearchTicket}
+                />
                 {
                     this.renderTableSection()
                 }
             </Container>
         );
-    }
-
-    public renderSearchForm(): JSX.Element {
-
-        let searchedData = this.props.searchedData;
-
-        return (
-            <Form onSubmit={this.onSearchSubmit}>
-                <Row form>
-
-                    <Col md="4">
-                        <FormGroup row className="thin-padding-right">
-                            <Label for="ticket_src_name" className="text-left" sm={3}>Name</Label>
-                            <Col sm={9}>
-                                <Input
-                                    type="text"
-                                    name="name"
-                                    id="ticket_src_name"
-                                    placeholder="Ticket Name"
-                                    defaultValue={searchedData.name}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col md="3">
-                        <FormGroup row className="thin-padding-right">
-                            <Label for="ticket_src_status" className="text-left" sm={3}>Status</Label>
-                            <Col sm={9}>
-                                <SelectTicketStatuses
-                                    name="status_id"
-                                    id="ticket_src_status"
-                                    defaultValue={searchedData.status_id}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col md="3">
-                        <FormGroup row className="thin-padding-right">
-                            <Label for="ticket_src_type" className="text-left" sm={3}>See</Label>
-                            <Col sm={9}>
-                                <Input
-                                    type="select"
-                                    name="see"
-                                    id="ticket_src_status"
-                                    defaultValue={searchedData.see}
-                                >
-                                    <option value="0">All Ticket</option>
-                                    <option value="1">My Own Ticket</option>
-                                    <option value="2">Assigned To Me</option>
-                                </Input>
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col md="2">
-                        <Button type="reset" color="light">
-                            <span><i className="fa fa-times" /></span>
-                        </Button>
-                        {' '}
-                        <Button type="submit" color="light">
-                            <span><i className="fa fa-search" /></span>
-                        </Button>
-                    </Col>
-
-                </Row>
-            </Form>
-        )
     }
 
     public renderTableSection(): JSX.Element {
@@ -216,7 +156,10 @@ class Ticket extends React.PureComponent<TicketProps>
     }
 }
 
-export default withRouter(connect(
-    (state: ApplicationState) => state.ticketStore,
-    TicketStore.actionCreators
-)(Ticket as any));
+export default compose(
+    withRouter,
+    connect(
+        (state: ApplicationState) => state.ticketStore,
+        TicketStore.actionCreators
+    )
+)(Ticket as any);

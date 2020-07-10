@@ -81,7 +81,9 @@ namespace IssueTracker.Helpers
             {
                 if (p.Json != null && !isFound)
                 {
-                    JsonPropertyAttribute q = p.Json as JsonPropertyAttribute;
+                    JsonPropertyAttribute q = p.Json as JsonPropertyAttribute; 
+                    
+                    // REFLECTION CARI ATRIBUT [JsonProperty=".."]
 
                     if (string.Compare(q.PropertyName, propertyNameToOrder, StringComparison.OrdinalIgnoreCase) == 0)
                     {

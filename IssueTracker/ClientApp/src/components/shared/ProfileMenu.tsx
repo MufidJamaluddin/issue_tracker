@@ -1,34 +1,39 @@
 ﻿import * as React from 'react'
-import { DropdownToggle, Dropdown, DropdownItem, DropdownMenu } from 'reactstrap'
-import { useState } from 'react';
+import { DropdownToggle, Dropdown, DropdownItem, DropdownMenu, UncontrolledDropdown } from 'reactstrap'
+import { Link } from 'react-router-dom'
 
 interface ProfileMenuProps {
     name: string
     image?: string
     email: string
+    logout_path: string
 }
 
 const ProfileMenu = (props: any) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-
-    let profileImg = 'https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg'
+    let profileImg = props.image ? props.image : '_fox.jpg'
+    let profileImgPath = `${process.env.PUBLIC_URL}/static/profile_min/${profileImg}`
 
     return (
-        <Dropdown className="nav-item" isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle caret className="nav-link" >
-                <img src={profileImg}
+        <UncontrolledDropdown setActiveFromChild className="nav-item">
+            <DropdownToggle caret className="nav-link" tag="a">
+                <img src={profileImgPath}
                     width="30"
                     height="30"
                     className="rounded-circle"
                 />
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem header>{props.name}</DropdownItem>
-                <DropdownItem>{props.email}</DropdownItem>
+                <DropdownItem header tag="a">{props.name}</DropdownItem>
+                <DropdownItem tag="a">{props.email}</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem tag="a">
+                    <Link to={props.logout_path}>
+                        <span><i className="fa fa-sign-out" /></span> Logout
+                    </Link>
+                </DropdownItem>
             </DropdownMenu>
-       </Dropdown>
+        </UncontrolledDropdown>
   )
 }
 

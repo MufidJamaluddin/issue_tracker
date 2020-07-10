@@ -30,6 +30,7 @@ namespace IssueTracker.Models.ViewModels
         public string Password { get; set; }
 
         [StringLength(100)]
+        [JsonProperty(PropertyName = "image")]
         public string Image { get; set; }
 
         /**

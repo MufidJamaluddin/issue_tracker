@@ -46,11 +46,14 @@
   <ItemGroup>
     <None Remove="ClientApp\src\components\Category.tsx" />
     <None Remove="ClientApp\src\components\Login.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Category\CategorySearchForm.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\Home.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\Logout.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\Ticket\SelectTicketStatuses.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketDetail.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketSearchForm.tsx" />
     <None Remove="ClientApp\src\components\pages\dashboard\User\UserDetail.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\User\UserSearchForm.tsx" />
     <None Remove="ClientApp\src\components\shared\CLoading.tsx" />
     <None Remove="ClientApp\src\components\shared\NeedAuth.tsx" />
     <None Remove="ClientApp\src\components\shared\ProfileMenu.tsx" />
@@ -84,11 +87,14 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category\CategorySearchForm.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Home.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Logout.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\SelectTicketStatuses.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\TicketDetail.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\TicketSearchForm.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\UserDetail.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\UserSearchForm.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\public\Login.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User.tsx">
       <SubType>Code</SubType>

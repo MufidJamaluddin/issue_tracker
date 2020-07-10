@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { ApplicationState } from '../../../store';
 import * as AuthStore from '../../../store/AuthStore';
+import { compose } from 'redux';
 
 type LogoutProps = AuthStore.LoginState & typeof AuthStore.actionCreators & RouteComponentProps<any>
 
@@ -31,9 +32,24 @@ class Logout extends React.PureComponent<LogoutProps>
         }
     }
 
+    public componentDidUpdate(): void
+    {
+        if (this.props.data.token === null)
+        {
+            this.redirectToHome()
+        }
+        else
+        {
+            this.props.requestLogout()
+        }
+    }
+
 }
 
-export default withRouter(connect(
-    (state: ApplicationState) => state.authStore,
-    AuthStore.actionCreators
-)(Logout as any))
+export default compose(
+    withRouter,
+    connect(
+        (state: ApplicationState) => state.authStore,
+        AuthStore.actionCreators
+    )
+)(Logout as any)

@@ -4,6 +4,7 @@ using IssueTracker.Models.ViewModels.Shared;
 using IssueTracker.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace IssueTracker.Controllers.Api
 {
@@ -20,15 +21,14 @@ namespace IssueTracker.Controllers.Api
         }
 
         [HttpGet]
-        [Authorize(Policy = RolePolicy.ProductOwner)]
-        [Authorize(Policy = RolePolicy.User)]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public UserVM GetUserData()
         {
             return new UserVM
             {
-                Id = User.FindFirst("id")?.Value,
-                Email = User.FindFirst("email")?.Value,
-                Role = User.FindFirst("role")?.Value,
+                Id = User.FindFirst(ClaimTypes.Name)?.Value,
+                Email = User.FindFirst(ClaimTypes.Email)?.Value,
+                Role = User.FindFirst(ClaimTypes.Role)?.Value,
             };
         }
 

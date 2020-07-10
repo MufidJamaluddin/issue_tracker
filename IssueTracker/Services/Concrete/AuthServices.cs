@@ -69,7 +69,7 @@ namespace IssueTracker.Services.Concrete
                 )
             )
             {
-                string token = user.GenerateJwtToken(_appSettings.Secret);
+                string token = user.GenerateJwtToken(_appSettings.Secret, _appSettings);
 
                 AuthenticateResponse data = new AuthenticateResponse(user, token);
 
