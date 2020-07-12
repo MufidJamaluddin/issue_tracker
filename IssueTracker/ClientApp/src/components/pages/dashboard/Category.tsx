@@ -4,7 +4,8 @@ import ReactPaginate from 'react-paginate'
 import { connect } from 'react-redux'
 import { ApplicationState } from '../../../store'
 import * as CategoryStore from '../../../store/CategoryStore'
-import { withRouter, generatePath } from 'react-router'
+import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Table, Col, Container, PaginationLink, Button, Progress, Row } from 'reactstrap'
 import { compose } from 'redux'
 
@@ -116,9 +117,20 @@ class Category extends React.PureComponent<CategoryProps>
                                     <th scope="row">{item.id}</th>
                                     <td>{item.name}</td>
                                     <td>
-                                        <Button color="light"><span><i className="fa fa-eye" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-pencil" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-trash" /></span></Button>
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/category/${item.id}/view`}>
+                                            <span><i className="fa fa-eye" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/category/${item.id}/edit`}>
+                                            <span><i className="fa fa-pencil" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/category/${item.id}/delete`}>
+                                            <span><i className="fa fa-trash" /></span>
+                                        </Link>
                                     </td>
                                 </tr>
                             )

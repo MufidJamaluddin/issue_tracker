@@ -34,6 +34,11 @@ namespace IssueTracker.Services.Concrete
             return data;
         }
 
+        public TicketVM GetDataById(string id)
+        {
+            return this.TicketRepository.GetOne(new TicketVM { Id = id });
+        }
+
         public PaginationResponse<TicketVM> GetDataWithPagination(PaginationRequest request)
         {
             SearchPaginationRequest<TicketVM> nrequest = new SearchPaginationRequest<TicketVM>(request);

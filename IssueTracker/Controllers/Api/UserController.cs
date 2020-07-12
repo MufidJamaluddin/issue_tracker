@@ -24,6 +24,14 @@ namespace IssueTracker.Controllers.Api
             this.UserServices = UserServices;
         }
 
+        [HttpGet]
+        [Route("get/{id}")]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
+        public UserVM GetOneData(string id)
+        {
+            return UserServices.GetDataById(id);
+        }
+
         /// <summary>
         /// Get User Data with Pagination
         /// </summary>

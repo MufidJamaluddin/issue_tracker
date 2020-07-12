@@ -5,6 +5,7 @@ namespace IssueTracker.Services
 {
     public interface ITicketServices
     {
+        public TicketVM GetDataById(string id);
         public PaginationResponse<TicketVM> SearchDataWithPagination(SearchPaginationRequest<TicketVM> request);
 
         public PaginationResponse<TicketVM> GetDataWithPagination(PaginationRequest request);

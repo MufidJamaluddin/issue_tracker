@@ -11,6 +11,7 @@ import { Input } from 'reactstrap';
 class SelectTicketStatuses extends React.PureComponent<{
     name: string,
     id: string,
+    is_only_view?: boolean,
     data: any[],
     defaultValue: any,
 } & typeof TicketStatusStore.actionCreators>
@@ -20,12 +21,16 @@ class SelectTicketStatuses extends React.PureComponent<{
     }
 
     render(): JSX.Element {
+
+        let is_only_view = this.props.is_only_view === true
+
         return (
             <Input
                 type="select"
                 name={this.props.name}
                 id={this.props.id}
                 defaultValue={this.props.defaultValue}
+                readOnly={is_only_view}
             >
                 <option key="0" value={''}>All Status</option>
                 {

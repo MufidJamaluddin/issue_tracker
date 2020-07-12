@@ -22,6 +22,7 @@ export interface TicketItem {
     owner: string
     category_name: string
     status: string
+    status_id: string
     see?: number
 }
 

@@ -12,6 +12,7 @@ import TicketSearchForm from './Ticket/TicketSearchForm'
 
 import { getMonthName } from './../../../monthtexter'
 import { compose } from 'redux'
+import { Link } from 'react-router-dom'
 
 /**
  *  Ticket Component
@@ -142,9 +143,20 @@ class Ticket extends React.PureComponent<TicketProps>
                                     <td>{item.category_name}</td>
                                     <td>{item.status}</td>
                                     <td>
-                                        <Button color="light"><span><i className="fa fa-eye" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-pencil" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-trash" /></span></Button>
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/ticket/${item.id}/view`}>
+                                            <span><i className="fa fa-eye" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/ticket/${item.id}/edit`}>
+                                            <span><i className="fa fa-pencil" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/ticket/${item.id}/delete`}>
+                                            <span><i className="fa fa-trash" /></span>
+                                        </Link>
                                     </td>
                                 </tr>
                             )

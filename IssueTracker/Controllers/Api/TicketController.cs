@@ -24,6 +24,14 @@ namespace IssueTracker.Controllers.Api
             this.TicketServices = TicketServices;
         }
 
+        [HttpGet]
+        [Route("get/{id}")]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
+        public TicketVM GetOneData(string id)
+        {
+            return TicketServices.GetDataById(id);
+        }
+
         /// <summary>
         /// Get Ticket Data with Pagination
         /// </summary>

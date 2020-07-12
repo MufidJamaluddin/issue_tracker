@@ -16,7 +16,7 @@ const ProfileMenu = (props: any) => {
 
     return (
         <UncontrolledDropdown setActiveFromChild className="nav-item">
-            <DropdownToggle caret className="nav-link" tag="a">
+            <DropdownToggle caret className="nav-link" tag="p">
                 <img src={profileImgPath}
                     width="30"
                     height="30"
@@ -24,10 +24,10 @@ const ProfileMenu = (props: any) => {
                 />
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem header tag="a">{props.name}</DropdownItem>
-                <DropdownItem tag="a">{props.email}</DropdownItem>
+                <DropdownItem header tag="p">{props.name}</DropdownItem>
+                <DropdownItem tag="p">{props.email}</DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem tag="a">
+                <DropdownItem tag="p">
                     <Link to={props.logout_path}>
                         <span><i className="fa fa-sign-out" /></span> Logout
                     </Link>

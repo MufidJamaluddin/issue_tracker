@@ -11,6 +11,7 @@ import { compose } from 'redux'
 import UserSearchForm from './User/UserSearchForm'
 
 import ModalImage from 'react-modal-image'
+import { Link } from 'react-router-dom'
 
 type UserProps =
     UserStore.UserState
@@ -139,9 +140,20 @@ class User extends React.PureComponent<UserProps>
                                     <td>{item.email}</td>
                                     <td>{item.role}</td>
                                     <td>
-                                        <Button color="light"><span><i className="fa fa-eye" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-pencil" /></span></Button>{' '}
-                                        <Button color="light"><span><i className="fa fa-trash" /></span></Button>
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/user/${item.id}/view`}>
+                                            <span><i className="fa fa-eye" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/user/${item.id}/edit`}>
+                                            <span><i className="fa fa-pencil" /></span>
+                                        </Link>
+                                        {' '}
+                                        <Link className="btn" color="light"
+                                            to={`/dashboard/user/${item.id}/delete`}>
+                                            <span><i className="fa fa-trash" /></span>
+                                        </Link>
                                     </td>
                                 </tr>
                             )

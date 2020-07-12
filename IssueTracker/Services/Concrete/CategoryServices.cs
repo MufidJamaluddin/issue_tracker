@@ -28,6 +28,11 @@ namespace IssueTracker.Services.Concrete
             this.TransactionRepository = TransactionRepository;
         }
 
+        public CategoryVM GetDataById(string id)
+        {
+            return this.CategoryRepository.GetOne(new CategoryVM { Id = id });
+        }
+
         public IEnumerable<CategoryVM> GetAllData()
         {
             IEnumerable<CategoryVM> data = CategoryRepository.GetAllData();

@@ -5,6 +5,7 @@ namespace IssueTracker.Services
 {
     public interface ICategoryServices
     {
+        public CategoryVM GetDataById(string id);
         public PaginationResponse<CategoryVM> SearchDataWithPagination(SearchPaginationRequest<CategoryVM> request);
 
         public PaginationResponse<CategoryVM> GetDataWithPagination(PaginationRequest request);

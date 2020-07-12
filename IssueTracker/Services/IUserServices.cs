@@ -5,6 +5,7 @@ namespace IssueTracker.Services
 {
     public interface IUserServices
     {
+        public UserVM GetDataById(string id);
         public PaginationResponse<UserVM> SearchDataWithPagination(SearchPaginationRequest<UserVM> request);
 
         public PaginationResponse<UserVM> GetDataWithPagination(PaginationRequest request);

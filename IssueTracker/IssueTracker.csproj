@@ -64,13 +64,16 @@
     <None Remove="ClientApp\src\routes.tsx" />
     <None Remove="ClientApp\src\store\AuthStore.ts" />
     <None Remove="ClientApp\src\store\CategoryStore.ts" />
+    <None Remove="ClientApp\src\store\CategoryStoreDetail.ts" />
     <None Remove="ClientApp\src\store\LoadingStore.tsx" />
     <None Remove="ClientApp\src\store\shared\MessageResponseModel.ts" />
     <None Remove="ClientApp\src\store\shared\PaginationResponseModel.ts" />
     <None Remove="ClientApp\src\store\shared\ResponseModel.ts" />
     <None Remove="ClientApp\src\store\TicketStatusStore.ts" />
     <None Remove="ClientApp\src\store\TicketStore.ts" />
+    <None Remove="ClientApp\src\store\TicketStoreDetail.ts" />
     <None Remove="ClientApp\src\store\UserStore.ts" />
+    <None Remove="ClientApp\src\store\UserStoreDetail.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -107,25 +110,25 @@
     <TypeScriptCompile Include="ClientApp\src\monthtexter.ts" />
     <TypeScriptCompile Include="ClientApp\src\routes.tsx" />
     <TypeScriptCompile Include="ClientApp\src\store\AuthStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\CategoryStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\store\LoadingStore.tsx" />
     <TypeScriptCompile Include="ClientApp\src\store\shared\ResponseModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\TicketStatusStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\TicketStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\store\TicketStore.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\store\CategoryStore.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\shared\PaginationResponseModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\shared\MessageResponseModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\UserStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\store\UserStore.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ClientApp\src\store\TicketStore.js">
-      <DependentUpon>TicketStore.ts</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\store\TicketStore.js.map">
-      <DependentUpon>TicketStore.js</DependentUpon>
-    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

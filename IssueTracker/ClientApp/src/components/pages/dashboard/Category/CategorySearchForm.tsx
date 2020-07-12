@@ -17,13 +17,13 @@ const CategorySearchForm = (props: CategorySearchFromProps) => <Form onSubmit={p
 
         <Col md="2">
             <FormGroup row className="thin-padding-right">
-                <Label for="category_src_name" className="text-left" sm={3}>ID</Label>
+                <Label for="category_src_id" className="text-left" sm={3}>ID</Label>
                 <Col sm={9}>
                     <Input
                         type="text"
                         name="id"
-                        id="category_src_name"
-                        placeholder="category Name"
+                        id="category_src_id"
+                        placeholder="Category ID"
                         defaultValue={props.searchData.id}
                     />
                 </Col>

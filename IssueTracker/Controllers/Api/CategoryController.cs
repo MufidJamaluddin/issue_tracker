@@ -24,6 +24,18 @@ namespace IssueTracker.Controllers.Api
             CategoryServices = categoryServices;
         }
 
+
+        /// <summary>
+        /// Get Category Data with Pagination
+        /// </summary>
+        [HttpGet]
+        [Route("get/{id}")]
+        [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
+        public CategoryVM GetOneData(string id)
+        {
+            return CategoryServices.GetDataById(id);
+        }
+
         /// <summary>
         /// Get Category Data with Pagination
         /// </summary>

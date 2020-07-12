@@ -1,6 +1,12 @@
 import * as CategoryStore from './CategoryStore';
+import * as CategoryStoreDetail from './CategoryStoreDetail';
+
 import * as TicketStore from './TicketStore';
+import * as TicketStoreDetail from './TicketStoreDetail';
+
 import * as UserStore from './UserStore';
+import * as UserStoreDetail from './UserStoreDetail';
+
 import * as LoadingStore from './LoadingStore';
 
 import * as TicketStatusStore from './TicketStatusStore';
@@ -9,7 +15,11 @@ import * as AuthStore from './AuthStore';
 // The top-level state object
 export interface ApplicationState {
     categoryStore: CategoryStore.CategoryState | undefined;
+    categoryStoreDetail: CategoryStoreDetail.OneCategoryState | undefined;
+
     ticketStore: TicketStore.TicketState | undefined;
+    ticketStoreDetail: TicketStoreDetail.OneTicketState | undefined;
+
     userStore: UserStore.UserState | undefined;
 
     ticketStatusStore: TicketStatusStore.TicketStatusState | undefined;
@@ -24,8 +34,13 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
     categoryStore: CategoryStore.reducer,
+    categoryStoreDetail: CategoryStoreDetail.reducer,
+
     ticketStore: TicketStore.reducer,
+    ticketStoreDetail: TicketStoreDetail.reducer,
+
     userStore: UserStore.reducer,
+    userStoreDetail: UserStoreDetail.reducer,
 
     ticketStatusStore: TicketStatusStore.reducer,
 
