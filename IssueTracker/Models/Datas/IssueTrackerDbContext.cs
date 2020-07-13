@@ -83,8 +83,7 @@ namespace IssueTracker.Models.Datas
 
             /** R_LOG TABLE CREATION **/
             EntityTypeBuilder<Log> log = builder?.Entity<Log>()
-                .ToTable("TR_LOG")
-                .HasNoKey();
+                .ToTable("TR_LOG");
 
             log.Property(u => u.Message)
                .HasColumnType("text");

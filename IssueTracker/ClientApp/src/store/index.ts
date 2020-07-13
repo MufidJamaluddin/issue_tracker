@@ -21,6 +21,7 @@ export interface ApplicationState {
     ticketStoreDetail: TicketStoreDetail.OneTicketState | undefined;
 
     userStore: UserStore.UserState | undefined;
+    userStoreDetail: UserStoreDetail.OneUserState | undefined;
 
     ticketStatusStore: TicketStatusStore.TicketStatusState | undefined;
 

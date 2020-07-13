@@ -137,7 +137,7 @@ namespace IssueTracker.Models.Repositories
 
             lastData.Name = data.Name;
 
-            DbContext.Add(lastData);
+            //DbContext.Add(lastData);
 
             int historySequence = lastData.TicketStatusHistories
                 .Select(u => u.Seq)

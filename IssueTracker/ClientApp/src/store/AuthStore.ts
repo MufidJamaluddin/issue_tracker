@@ -81,6 +81,7 @@ export const actionCreators = {
 
             dispatch({ type: 'REQUEST_LOGOUT' });
         },
+
 };
 
 const unloadedState: LoginState = {

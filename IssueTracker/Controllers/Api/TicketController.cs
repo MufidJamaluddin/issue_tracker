@@ -29,7 +29,11 @@ namespace IssueTracker.Controllers.Api
         [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public TicketVM GetOneData(string id)
         {
-            return TicketServices.GetDataById(id);
+            var data = TicketServices.GetDataById(id);
+
+            data.SetLoggedUser(User.FindFirst("id")?.Value ?? "");
+
+            return data;
         }
 
         /// <summary>
@@ -39,7 +43,9 @@ namespace IssueTracker.Controllers.Api
         [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
         public PaginationResponse<TicketVM> GetDataWithPagination([FromQuery] PaginationRequest request)
         {
-            return TicketServices.GetDataWithPagination(request);
+            var data = TicketServices.GetDataWithPagination(request);
+
+            return data;
         }
 
         /// <summary>

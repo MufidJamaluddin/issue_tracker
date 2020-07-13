@@ -207,12 +207,12 @@ namespace IssueTracker.Models.Repositories
                 );
             }
 
-            DbContext.Add(lastData);
+            //DbContext.Add(lastData);
 
-            int historySequence = lastData.UserHistories
+            int historySequence = lastData?.UserHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             UserHistory userHistory = new UserHistory();
             userHistory.FillFromUser(
@@ -230,7 +230,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Save Data is Success!",
+                    Message = "Update Data is Success!",
                     Data = new UserVM[] { data },
                 };
             }
@@ -240,7 +240,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = false,
                     Code = "E-003",
-                    Message = "Save Data Failed! Please Contact an Web Administrator!",
+                    Message = "Update Data Failed! Please Contact an Web Administrator!",
                     Data = new UserVM[] { data },
                 };
             }
@@ -267,10 +267,10 @@ namespace IssueTracker.Models.Repositories
 
             User lastData = lastDataContext.FirstOrDefault();
 
-            int historySequence = lastData.UserHistories
+            int historySequence = lastData?.UserHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             DbContext.Remove(lastData);
 

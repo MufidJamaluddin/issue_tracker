@@ -161,6 +161,17 @@ namespace IssueTracker.Models.Repositories
                 return new CommonResponse<CategoryVM>
                 {
                     Status = false,
+                    Code = "E-002",
+                    Message = string.Format("Data not found for ID {0}, please fill the right ID!", data?.Id),
+                    Data = new CategoryVM[] { data },
+                };
+            }
+
+            if (lastData == null)
+            {
+                return new CommonResponse<CategoryVM>
+                {
+                    Status = false,
                     Code = "E-004",
                     Message = "Ubah Data Gagal! Data Tidak Ditemukan!",
                     Data = new CategoryVM[] { data },
@@ -169,12 +180,12 @@ namespace IssueTracker.Models.Repositories
 
             lastData.Name = data.Name;
 
-            DbContext.Add(lastData);
+            //DbContext.Add(lastData); No add in update
 
-            int historySequence = lastData.CategoryHistories
+            int historySequence = lastData?.CategoryHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             CategoryHistory categoryDataHistory = new CategoryHistory();
             categoryDataHistory.FillFromCategory(
@@ -202,7 +213,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = false,
                     Code = "E-003",
-                    Message = "Save Data Failed! Please Contact an Web Administrator!",
+                    Message = "Update Data Failed! Please Contact an Web Administrator!",
                     Data = new CategoryVM[] { data },
                 };
             }
@@ -229,10 +240,21 @@ namespace IssueTracker.Models.Repositories
 
             Category lastData = lastDataContext.FirstOrDefault();
 
-            int historySequence = lastData.CategoryHistories
+            if (lastData == null)
+            {
+                return new CommonResponse<CategoryVM>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = string.Format("Data not found for ID {0}, please fill the right ID!", data?.Id),
+                    Data = new CategoryVM[] { data },
+                };
+            }
+
+            int historySequence = lastData?.CategoryHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             DbContext.Remove(lastData);
 

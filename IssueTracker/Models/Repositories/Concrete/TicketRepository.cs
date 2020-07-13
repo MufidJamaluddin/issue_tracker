@@ -187,7 +187,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Retrieve Data is Success!",
+                    Message = "Save Data is Success!",
                     Data = new TicketVM[] { data },
                 };
             }
@@ -198,6 +198,101 @@ namespace IssueTracker.Models.Repositories
                     Status = true,
                     Code = "E-003",
                     Message = "Save Data Failed! Please Contact an Web Administrator!",
+                    Data = new TicketVM[] { data },
+                };
+            }
+        }
+
+        public CommonResponse<TicketVM> UpdateData(TicketVM data, string transactionId, string loggedUserId)
+        {
+            CommonResponse<TicketVM> response = ValidateParameter(data);
+
+            if (response != null)
+            {
+                return response;
+            }
+
+            User assignee = DbContext.Users.Where(u => u.Id == data.AssigneeId).FirstOrDefault();
+            Category category = DbContext.Categories.Where(u => u.Id == data.CategoryID).FirstOrDefault();
+            TicketStatus status = DbContext.TicketStatuses.Where(u => u.Id == data.StatusID).FirstOrDefault();
+
+            if (data?.Id == null)
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = "Invalid update data, please fill the ID!",
+                    Data = new TicketVM[] { data },
+                };
+            }
+
+            Ticket lastData = DbContext.Tickets.Where(u => u.Id == data.Id).FirstOrDefault();
+
+            if(lastData == null)
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = string.Format("Data not found for ID {0}, please fill the right ID!", data?.Id),
+                    Data = new TicketVM[] { data },
+                };
+            }
+
+            lastData.Name = data.Name;
+            lastData.Description = data.Description;
+            lastData.CreatedDate = data.CreatedDate;
+
+            if (assignee != null)
+            {
+                lastData.Assignee = assignee;
+            }
+
+            if (category != null)
+            {
+                lastData.Category = category;
+            }
+
+            if (status != null && lastData.Assignee?.Id == loggedUserId)
+            {
+                lastData.Status = status;
+            }
+
+            //DbContext.Add(lastData);
+
+            int historySequence = lastData?.TicketHistories?
+                .Select(u => u.Seq)
+                .OrderByDescending(u => u)
+                .FirstOrDefault() ?? 0;
+
+            TicketHistory ticketHistory = new TicketHistory();
+            ticketHistory.FillFromTicket(
+                lastData,
+                transactionId,
+                historySequence + 1,
+                TableTransactionOperation.Update
+            );
+
+            DbContext.Add(ticketHistory);
+
+            if (DbContext.SaveChanges() > 0)
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = true,
+                    Code = "S",
+                    Message = "Update Data is Success!",
+                    Data = new TicketVM[] { data },
+                };
+            }
+            else
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = false,
+                    Code = "E-003",
+                    Message = "Update Data Failed! Please Contact an Web Administrator!",
                     Data = new TicketVM[] { data },
                 };
             }
@@ -229,6 +324,17 @@ namespace IssueTracker.Models.Repositories
 
             Ticket lastData = DbContext.Tickets.Where(u => u.Id == data.Id).FirstOrDefault();
 
+            if (lastData == null)
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = string.Format("Data not found for ID {0}, please fill the right ID!", data?.Id),
+                    Data = new TicketVM[] { data },
+                };
+            }
+
             lastData.Name = data.Name;
             lastData.Description = data.Description;
             lastData.CreatedDate = data.CreatedDate;
@@ -248,12 +354,12 @@ namespace IssueTracker.Models.Repositories
                 lastData.Status = status;
             }
 
-            DbContext.Add(lastData);
+            //DbContext.Add(lastData);
 
-            int historySequence = lastData.TicketHistories
+            int historySequence = lastData?.TicketHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             TicketHistory ticketHistory = new TicketHistory();
             ticketHistory.FillFromTicket(
@@ -271,7 +377,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Retrieve Data is Success!",
+                    Message = "Update Data is Success!",
                     Data = new TicketVM[] { data },
                 };
             }
@@ -281,7 +387,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = false,
                     Code = "E-003",
-                    Message = "Save Data Failed! Please Contact an Web Administrator!",
+                    Message = "Update Data Failed! Please Contact an Web Administrator!",
                     Data = new TicketVM[] { data },
                 };
             }
@@ -308,10 +414,21 @@ namespace IssueTracker.Models.Repositories
 
             Ticket lastData = lastDataContext.FirstOrDefault();
 
-            int historySequence = lastData.TicketHistories
+            if (lastData == null)
+            {
+                return new CommonResponse<TicketVM>
+                {
+                    Status = false,
+                    Code = "E-002",
+                    Message = string.Format("Data not found for ID {0}, please fill the right ID!", data?.Id),
+                    Data = new TicketVM[] { data },
+                };
+            }
+
+            int historySequence = lastData?.TicketHistories?
                 .Select(u => u.Seq)
                 .OrderByDescending(u => u)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? 0;
 
             DbContext.Tickets.Remove(lastData);
 

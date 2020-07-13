@@ -4,6 +4,8 @@ import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 import MessageResponseModel from './shared/MessageResponseModel';
 import { TicketItem } from './TicketStore';
 
+import { merge } from 'lodash'
+
 export interface OneTicketState {
     data: TicketItem
     status: boolean
@@ -60,7 +62,7 @@ export const actionCreators = {
                 appState.ticketStoreDetail &&
                 id != null && id != ''
             ) {
-                fetch(`api/Ticket/get/${id}`, {
+                fetch(`api/ticket/get/${id}`, {
                     method: 'GET',
                     cache: 'no-cache',
                     headers: {
@@ -95,7 +97,7 @@ export const actionCreators = {
                 id != null && id != '' && data != null
             ) {
                 if (data.id == id) {
-                    fetch(`api/Ticket`, {
+                    fetch(`api/ticket`, {
                         method: 'PUT',
                         cache: 'no-cache',
                         headers: {
@@ -131,7 +133,7 @@ export const actionCreators = {
                 appState.ticketStoreDetail &&
                 id != null && id != ''
             ) {
-                fetch(`api/Ticket`, {
+                fetch(`api/ticket`, {
                     method: 'DELETE',
                     cache: 'no-cache',
                     headers: {
@@ -180,6 +182,28 @@ const unloadedState: OneTicketState = {
     message: '',
 };
 
+const getRequiredData = (data?: TicketItem) => {
+
+    if (!data) return unloadedState.data
+
+    try {
+        return {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            created_date: data.created_date,
+            category_name: data.category_name,
+            assignee: data.assignee,
+            owner: data.owner,
+            status: data.status,
+            status_id: data.status_id,
+        }
+    }
+    catch (e) {
+        return unloadedState.data
+    }
+}
+
 export const reducer: Reducer<OneTicketState> = (
     state: OneTicketState | undefined, incomingAction: Action): OneTicketState => {
     if (state === undefined) {
@@ -199,22 +223,26 @@ export const reducer: Reducer<OneTicketState> = (
 
         case 'RECEIVE_ONE_TICKET':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data
+                data: getRequiredData(action.data)
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_UPDATE_ONE_TICKET':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data.data,
+                data: getRequiredData(action.data.data),
                 status: action.data.status,
                 code: action.data.code,
                 message: action.data.message,
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_DELETE_ONE_TICKET':
 

@@ -55,7 +55,22 @@ namespace IssueTracker.Models.ViewModels
         [JsonProperty(PropertyName = "see", NullValueHandling = NullValueHandling.Ignore)]
         public string SeeType { get; set; }
 
+        [JsonProperty(PropertyName = "ismyownticket", NullValueHandling = NullValueHandling.Ignore)]
+        public bool IsMyOwnTicket { get; set; }
+
+        [JsonProperty(PropertyName = "ismyassignedticket", NullValueHandling = NullValueHandling.Ignore)]
+        public bool IsMyAssignedTicket { get; set; }
+
         [JsonIgnore]
         public string MyUserId { get; set; }
+
+        public void SetLoggedUser(string loggedUserId)
+        {
+            if (this.AssigneeId == null && this.OwnerID == null && loggedUserId == null)
+                throw new ArgumentNullException("The Assignee, Owner, dan Current User must be set!");
+
+            this.IsMyAssignedTicket = string.Compare(loggedUserId, this.AssigneeId, StringComparison.OrdinalIgnoreCase) == 0;
+            this.IsMyOwnTicket = string.Compare(loggedUserId, this.OwnerID, StringComparison.OrdinalIgnoreCase) == 0;
+        }
     }
 }

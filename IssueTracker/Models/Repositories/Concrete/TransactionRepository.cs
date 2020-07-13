@@ -23,13 +23,13 @@ namespace IssueTracker.Models.Repositories
 
             TableTransaction transactionData = new TableTransaction
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString("N"),
                 IpAddress = data.IpAddress,
                 UserId = data.UserId,
                 CreatedAt = DateTime.Now,
             };
 
-            DbContext.Transactions.Add(transactionData);
+            DbContext.Add(transactionData);
             DbContext.SaveChanges();
 
             return transactionData.Id;

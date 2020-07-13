@@ -4,14 +4,16 @@ using IssueTracker.Models.Datas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IssueTracker.Migrations
 {
     [DbContext(typeof(IssueTrackerDbContext))]
-    partial class IssueTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200713141138_Fix Log Entity Framework")]
+    partial class FixLogEntityFramework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

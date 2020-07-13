@@ -3,6 +3,8 @@ import { AppThunkAction } from '.';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 import MessageResponseModel from './shared/MessageResponseModel';
 
+import { merge } from 'lodash'
+
 export interface OneUserState {
     data: UserItem
     status: boolean
@@ -66,7 +68,7 @@ export const actionCreators = {
                 appState.categoryStoreDetail &&
                 id != null && id != ''
             ) {
-                fetch(`api/category/get/${id}`, {
+                fetch(`api/user/get/${id}`, {
                     method: 'GET',
                     cache: 'no-cache',
                     headers: {
@@ -101,7 +103,7 @@ export const actionCreators = {
                 id != null && id != '' && data != null
             ) {
                 if (data.id == id) {
-                    fetch(`api/category`, {
+                    fetch(`api/user`, {
                         method: 'PUT',
                         cache: 'no-cache',
                         headers: {
@@ -137,7 +139,7 @@ export const actionCreators = {
                 appState.categoryStoreDetail &&
                 id != null && id != ''
             ) {
-                fetch(`api/category`, {
+                fetch(`api/user`, {
                     method: 'DELETE',
                     cache: 'no-cache',
                     headers: {
@@ -181,6 +183,23 @@ const unloadedState: OneUserState = {
     message: '',
 };
 
+const getRequiredData = (data?: UserItem) => {
+
+    if (!data) return unloadedState.data
+
+    try {
+        return {
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            image: data.image,
+        }
+    }
+    catch (e) {
+        return unloadedState.data
+    }
+}
+
 export const reducer: Reducer<OneUserState> = (
     state: OneUserState | undefined, incomingAction: Action): OneUserState => {
     if (state === undefined) {
@@ -200,22 +219,26 @@ export const reducer: Reducer<OneUserState> = (
 
         case 'RECEIVE_ONE_USER':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data
+                data: getRequiredData(action.data)
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_UPDATE_ONE_USER':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data.data,
+                data: getRequiredData(action.data.data),
                 status: action.data.status,
                 code: action.data.code,
                 message: action.data.message,
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_DELETE_ONE_USER':
 

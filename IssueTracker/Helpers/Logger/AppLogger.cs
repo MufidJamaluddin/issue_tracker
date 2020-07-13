@@ -51,6 +51,7 @@ namespace IssueTracker.Helpers.Logger
                     EventId = eventId.Id,
                     Name = _name,
                     Message = formatter(state, exception),
+                    CreatedDate = DateTime.Now
                 };
 
                 _dbContext.Add(log);

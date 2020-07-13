@@ -99,7 +99,7 @@ namespace IssueTracker.Services.Concrete
             {
                 string transactionId = TransactionRepository.InitializeTransaction(transaction);
 
-                result = TicketRepository.UpdateData(data, transactionId);
+                result = TicketRepository.UpdateData(data, transactionId, transaction.UserId);
 
                 dbTransaction.Commit();
             }

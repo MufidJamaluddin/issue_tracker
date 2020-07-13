@@ -3,6 +3,8 @@ import { AppThunkAction } from '.';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 import MessageResponseModel from './shared/MessageResponseModel';
 
+import { merge } from 'lodash'
+
 export interface OneCategoryState
 {
     data: CategoryItem
@@ -70,7 +72,7 @@ export const actionCreators = {
             if (
                 appState &&
                 appState.categoryStoreDetail &&
-                id != null && id != ''
+                appState.categoryStoreDetail.data.id !== id
             )
             {
                 fetch(`api/category/get/${id}`, {
@@ -187,6 +189,21 @@ const unloadedState: OneCategoryState = {
     message: '',
 };
 
+const getRequiredData = (data?: CategoryItem) => {
+
+    if (!data) return unloadedState.data
+
+    try {
+        return {
+            id: data.id,
+            name: data.name,
+        }
+    }
+    catch (e) {
+        return unloadedState.data
+    }
+}
+
 export const reducer: Reducer<OneCategoryState> = (
     state: OneCategoryState | undefined, incomingAction: Action): OneCategoryState =>
 {
@@ -209,24 +226,30 @@ export const reducer: Reducer<OneCategoryState> = (
 
         case 'RECEIVE_ONE_CATEGORY':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data
+                data: getRequiredData(action.data)
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_UPDATE_ONE_CATEGORY':
 
+            newState = merge({}, state)
+
             newState = {
-                data: action.data.data,
+                data: getRequiredData(action.data.data),
                 status: action.data.status,
                 code: action.data.code,
                 message: action.data.message,
             }
 
-            return { ...state, ...newState }
+            return newState
 
         case 'RECEIVE_DELETE_ONE_CATEGORY':
+
+            newState = merge({}, state)
 
             newState = {
                 data: unloadedState.data,

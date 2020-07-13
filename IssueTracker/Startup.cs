@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -116,15 +117,23 @@ namespace IssueTracker
         {
             AppConfig appConfig = Configuration.GetSection("AppConfig").Get<AppConfig>();
 
-            AppLoggerConfiguration loggerConfig = new AppLoggerConfiguration
-            {
-                LogLevel = LogLevel.Warning,
-                EventId = 0,
+            List<AppLoggerConfiguration> loggerConfigs = new List<AppLoggerConfiguration> {
+                new AppLoggerConfiguration {
+                    LogLevel = LogLevel.Error,
+                    EventId = 0,
+                },
+                new AppLoggerConfiguration {
+                    LogLevel = LogLevel.Warning,
+                    EventId = 0,
+                },
             };
 
-            using AppLoggerProvider logger = new AppLoggerProvider(loggerConfig, dbContext);
+            loggerConfigs.ForEach(item =>
+            {
+                using AppLoggerProvider logger = new AppLoggerProvider(item, dbContext);
 
-            loggerFactory?.AddProvider(logger);
+                loggerFactory?.AddProvider(logger);
+            });
 
             if (env.IsDevelopment())
             {

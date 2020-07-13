@@ -24,6 +24,8 @@ export interface TicketItem {
     status: string
     status_id: string
     see?: number
+    ismyownticket?: boolean
+    ismyassignedticket?: boolean
 }
 
 // -----------------
