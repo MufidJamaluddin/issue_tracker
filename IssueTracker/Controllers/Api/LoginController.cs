@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace IssueTracker.Controllers.Api
@@ -44,21 +45,25 @@ namespace IssueTracker.Controllers.Api
         {
             string clientIpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
 
-            var data = AuthService.Authenticate(request, clientIpAddress);
+            CommonSResponse<AuthenticateResponse> data = AuthService.Authenticate(request, clientIpAddress);
 
-            if(data?.Data?.Token != null)
+            if (data?.Data?.Token != null)
             {
-                var cookieOptions = new CookieOptions()
+                CookieOptions cookieOptions = new CookieOptions
                 {
-                    Path = "/",
                     Expires = DateTimeOffset.UtcNow.AddDays(7),
-                    IsEssential = true,
                     HttpOnly = true,
                     Secure = false,
+                    SameSite = SameSiteMode.Lax,
                 };
 
+                Response.Headers.Append(
+                    "Authorization",
+                    string.Format(CultureInfo.InvariantCulture, "Bearer {0}", data.Data.Token)
+                );
+
                 Response.Cookies.Append(
-                    JwtInCookieMiddleware.JWT_COOKIE_KEY, 
+                    JwtInCookieMiddleware.JWT_COOKIE_KEY,
                     data.Data.Token,
                     cookieOptions
                 );
@@ -72,7 +77,7 @@ namespace IssueTracker.Controllers.Api
         /// Logout for delete token.
         /// </summary>
         [HttpDelete]
-        public CommonResponse<Object> Logout()
+        public CommonResponse<object> Logout()
         {
             Response.Cookies.Delete(JwtInCookieMiddleware.JWT_COOKIE_KEY);
 

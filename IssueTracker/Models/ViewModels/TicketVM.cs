@@ -66,11 +66,13 @@ namespace IssueTracker.Models.ViewModels
 
         public void SetLoggedUser(string loggedUserId)
         {
-            if (this.AssigneeId == null && this.OwnerID == null && loggedUserId == null)
+            if (AssigneeId == null && OwnerID == null && loggedUserId == null)
+            {
                 throw new ArgumentNullException("The Assignee, Owner, dan Current User must be set!");
+            }
 
-            this.IsMyAssignedTicket = string.Compare(loggedUserId, this.AssigneeId, StringComparison.OrdinalIgnoreCase) == 0;
-            this.IsMyOwnTicket = string.Compare(loggedUserId, this.OwnerID, StringComparison.OrdinalIgnoreCase) == 0;
+            IsMyAssignedTicket = string.Compare(loggedUserId, AssigneeId, StringComparison.OrdinalIgnoreCase) == 0;
+            IsMyOwnTicket = string.Compare(loggedUserId, OwnerID, StringComparison.OrdinalIgnoreCase) == 0;
         }
     }
 }

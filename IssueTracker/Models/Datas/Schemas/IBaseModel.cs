@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace IssueTracker.Models.Datas.Schemas
+﻿namespace IssueTracker.Models.Datas.Schemas
 {
     public interface IBaseModel
     {
-        public Boolean IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

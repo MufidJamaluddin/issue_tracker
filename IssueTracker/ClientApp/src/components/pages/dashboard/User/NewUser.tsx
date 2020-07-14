@@ -42,9 +42,12 @@ class NewUser extends React.PureComponent<NewUserProps>
         this.props.requestInsertOneUser(itemData)
     }
 
-    UNSAFE_componentWillMount(): void {
-        if (this.props.data.id !== null || this.props.data.id !== '')
+    componentWillMount(): void
+    {
+        if (this.props.data.id !== null && this.props.data.id !== '')
+        {
             this.props.requestBlankOneUser()
+        }
     }
 
     renderLoading(): JSX.Element {
@@ -71,7 +74,7 @@ class NewUser extends React.PureComponent<NewUserProps>
                     }
                     <Col md="12">
                         {
-                            (this.props.code === null && this.props.code === '') &&
+                            (this.props.code === null || this.props.code === '') &&
                             <Spinner />
                         }
                     </Col>
@@ -80,10 +83,12 @@ class NewUser extends React.PureComponent<NewUserProps>
         )
     }
 
-    render(): JSX.Element {
+    render(): JSX.Element
+    {
         let data = this.props.data
 
-        if (data.id !== null || data.id !== '') {
+        if (data.id !== null && data.id !== '')
+        {
             return this.renderLoading()
         }
 

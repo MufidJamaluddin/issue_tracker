@@ -99,12 +99,15 @@ class TicketDetail extends React.PureComponent<TicketDetailProps>
         let itemData: TicketItem = {
             id: this.props.data.id,
             name: data.get('name').toString(),
+            category_id: data.get('category_id').toString(),
             category_name: data.get('category_name').toString(),
             status_id: data.get('status_id').toString(),
             status: null, // AUTO
             description: data.get('description').toString(),
             created_date: data.get('created_date').toString(),
+            assignee_id: data.get('assignee_id').toString(),
             assignee: data.get('assignee').toString(),
+            owner_id: data.get('owner_id').toString(),
             owner: data.get('owner').toString(),
         }
 

@@ -96,7 +96,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
                 .then(
@@ -145,7 +144,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(data)
                 })
@@ -182,7 +180,6 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -218,7 +215,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
@@ -242,8 +238,6 @@ export const actionCreators = {
 
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const unloadedState: OneCategoryState = {
     data: {

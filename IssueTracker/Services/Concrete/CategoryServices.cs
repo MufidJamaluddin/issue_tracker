@@ -30,7 +30,7 @@ namespace IssueTracker.Services.Concrete
 
         public CategoryVM GetDataById(string id)
         {
-            return this.CategoryRepository.GetOne(new CategoryVM { Id = id });
+            return CategoryRepository.GetOne(new CategoryVM { Id = id });
         }
 
         public IEnumerable<CategoryVM> GetAllData()

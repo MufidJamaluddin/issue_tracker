@@ -81,19 +81,18 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
-                    .then(
-                        response => response.json() as Promise<TicketItem>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_ONE_TICKET', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
+                .then(
+                    response => response.json() as Promise<TicketItem>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_ONE_TICKET', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_ONE_TICKET', id: id });
@@ -130,7 +129,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(data)
                 })
@@ -166,7 +164,6 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -202,7 +199,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
@@ -226,8 +222,6 @@ export const actionCreators = {
 
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const unloadedState: OneTicketState = {
     data: {
@@ -235,11 +229,16 @@ const unloadedState: OneTicketState = {
         name: '',
         description: '',
         created_date: null,
+        category_id: null,
         category_name: '',
+        assignee_id: null,
         assignee: '',
+        owner_id: null,
         owner: '',
         status: '',
         status_id: null,
+        ismyownticket: true,
+        ismyassignedticket: true,
     },
     status: true,
     code: '',
@@ -250,20 +249,39 @@ const getRequiredData = (data?: TicketItem) => {
 
     if (!data) return unloadedState.data
 
-    try {
-        return {
+    try
+    {
+        let ndata = {
             id: data.id,
             name: data.name,
             description: data.description,
             created_date: data.created_date,
+            category_id: data.category_id,
             category_name: data.category_name,
+            assignee_id: data.assignee_id,
             assignee: data.assignee,
+            owner_id: data.owner_id,
             owner: data.owner,
             status: data.status,
             status_id: data.status_id,
         }
+
+        if (data.hasOwnProperty('ismyownticket'))
+        {
+            ndata['ismyownticket'] = data.ismyownticket
+        }
+        else ndata['ismyownticket'] = null;
+
+        if (data.hasOwnProperty('ismyassignedticket'))
+        {
+            ndata['ismyassignedticket'] = data.ismyassignedticket
+        }
+        else ndata['ismyassignedticket'] = null
+
+        return ndata;
     }
-    catch (e) {
+    catch (e)
+    {
         return unloadedState.data
     }
 }
@@ -285,7 +303,10 @@ export const reducer: Reducer<OneTicketState> = (
             newState = merge({}, state)
 
             newState = {
-                data: getRequiredData()
+                data: getRequiredData(),
+                status: true,
+                code: '',
+                message: '',
             }
 
             return newState
@@ -302,7 +323,10 @@ export const reducer: Reducer<OneTicketState> = (
             newState = merge({}, state)
 
             newState = {
-                data: getRequiredData(action.data)
+                data: getRequiredData(action.data),
+                status: true,
+                code: '',
+                message: '',
             }
 
             return newState

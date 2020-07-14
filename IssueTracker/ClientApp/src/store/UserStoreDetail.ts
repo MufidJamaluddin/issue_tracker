@@ -87,19 +87,18 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
-                    .then(
-                        response => response.json() as Promise<UserItem>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_ONE_USER', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
+                .then(
+                    response => response.json() as Promise<UserItem>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_ONE_USER', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_ONE_USER', id: id });
@@ -137,7 +136,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(data)
                 })
@@ -173,7 +171,6 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -209,22 +206,21 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
                     })
                 })
-                    .then(
-                        response => response.json() as Promise<MessageResponseModel & OneUserState>
-                    )
-                    .then(data => {
-                        dispatch({ type: 'RECEIVE_DELETE_ONE_USER', data: data });
-                        dispatch({ type: 'END_LOADING' });
-                    })
-                    .catch(exception => {
-                        dispatch({ type: 'END_LOADING' });
-                    });
+                .then(
+                    response => response.json() as Promise<MessageResponseModel & OneUserState>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_DELETE_ONE_USER', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_DELETE_ONE_USER', id: id });
@@ -233,8 +229,6 @@ export const actionCreators = {
 
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const unloadedState: OneUserState = {
     data: {

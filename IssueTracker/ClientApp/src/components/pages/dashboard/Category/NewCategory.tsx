@@ -47,48 +47,9 @@ class NewCategory extends React.PureComponent<NewCategoryProps>
         }
     }
 
-    renderLoading(): JSX.Element
-    {
-        return (
-            <Container>
-                <Row md="12">
-                    {
-                        (this.props.code !== null && this.props.code !== '') &&
-                        <>
-                            <Col md="12">
-                                <Alert color="warning">
-                                    <b>{this.props.code} :&nbsp;</b>{this.props.message}
-                                </Alert>
-                            </Col>
-                            <Col md="12">
-                                <Link to="/dashboard/category">
-                                    <Button type="button" color="light">
-                                        <span><i className="fa fa-chevron-left" /></span> &nbsp;
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Col>
-                        </>
-                    }
-                    <Col md="12">
-                        {
-                            (this.props.code === null || this.props.code === '') &&
-                            <Spinner />
-                        }
-                    </Col>
-                </Row>
-            </Container>
-        )
-    }
-
     render(): JSX.Element
     {
         let data = this.props.data
-
-        if (data.id !== null && data.id !== '')
-        {
-            return this.renderLoading()
-        }
 
         return (
             <Container>

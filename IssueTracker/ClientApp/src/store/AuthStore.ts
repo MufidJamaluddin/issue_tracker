@@ -122,27 +122,11 @@ const unloadedState: LoginState = {
     status: true,
 };
 
-//const LOCAL_STORAGE_KEY = "ISSUE_TRACKER_USER";
-
 export const reducer: Reducer<LoginState> = (
     state: LoginState | undefined, incomingAction: Action): LoginState => {
 
     if (state === undefined)
     {
-        /*
-        let currentUser = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-        if (currentUser !== null)
-        {
-            let userData = JSON.parse(currentUser);
-
-            if (userData.name && userData.email && userData.token)
-            {
-                return { ...unloadedState, data: userData }
-            }
-        }
-        */
-
         return unloadedState;
     }
 
@@ -163,8 +147,6 @@ export const reducer: Reducer<LoginState> = (
 
             newState = { ...unloadedState }
 
-            //localStorage.removeItem(LOCAL_STORAGE_KEY)
-
             return newState
 
         case 'RECEIVE_LOGIN':
@@ -173,13 +155,6 @@ export const reducer: Reducer<LoginState> = (
                 ...state,
                 ...action.data,
             }
-
-            /*
-            localStorage.setItem(
-                LOCAL_STORAGE_KEY,
-                JSON.stringify(action.data.data)
-            )
-            */
 
             return newState
 

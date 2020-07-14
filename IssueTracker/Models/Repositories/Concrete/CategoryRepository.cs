@@ -25,7 +25,7 @@ namespace IssueTracker.Models.Repositories
 
         public override IQueryable<CategoryVM> GetModel()
         {
-            IQueryable<CategoryVM> model = DbContext.Categories.Select(this.MapVM());
+            IQueryable<CategoryVM> model = DbContext.Categories.Select(MapVM());
 
             return model;
         }

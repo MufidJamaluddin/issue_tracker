@@ -29,65 +29,40 @@ class NewTicket extends React.PureComponent<NewTicketProps>
 
         let data = new FormData(event.target);
 
+        const ToString = (val: FormDataEntryValue): string => {
+            if (val) return val.toString()
+            else return null
+        }
+
         let itemData: TicketItem = {
             id: null,
-            name: data.get('name').toString(),
-            description: data.get('description').toString(),
-            created_date: data.get('created_date').toString(),
-            category_name: data.get('category_name').toString(),
-            assignee: data.get('assignee').toString(),
-            owner: data.get('owner').toString(),
-            status: data.get('status').toString(),
-            status_id: data.get('status_id').toString(),
+            name: ToString(data.get('name')),
+            description: ToString(data.get('description')),
+            created_date: ToString(data.get('created_date')),
+            category_id: ToString(data.get('category_id')),
+            category_name: ToString(data.get('category_name')),
+            assignee_id: ToString(data.get('assignee_id')),
+            assignee: ToString(data.get('assignee')),
+            owner_id: ToString(data.get('owner_id')),
+            owner: ToString(data.get('owner')),
+            status: ToString(data.get('status')),
+            status_id: ToString(data.get('status_id')),
         }
 
         this.props.requestInsertOneTicket(itemData)
     }
 
-    componentWillMount(): void {
-        if (this.props.data.id !== null || this.props.data.id !== '')
+    componentWillMount(): void
+    {
+        if (this.props.data.id !== null && this.props.data.id !== '')
+        {
             this.props.requestBlankOneTicket()
-    }
-
-    renderLoading(): JSX.Element {
-        return (
-            <Container>
-                <Row md="12">
-                    {
-                        (this.props.code !== null && this.props.code !== '') &&
-                        <>
-                            <Col md="12">
-                                <Alert color="warning">
-                                    <b>{this.props.code} :&nbsp;</b>{this.props.message}
-                                </Alert>
-                            </Col>
-                            <Col md="12">
-                                <Link to="/dashboard/ticket">
-                                    <Button type="button" color="light">
-                                        <span><i className="fa fa-chevron-left" /></span> &nbsp;
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Col>
-                        </>
-                    }
-                    <Col md="12">
-                        {
-                            (this.props.code === null && this.props.code === '') &&
-                            <Spinner />
-                        }
-                    </Col>
-                </Row>
-            </Container>
-        )
-    }
-
-    render(): JSX.Element {
-        let data = this.props.data
-
-        if (data.id !== null || data.id !== '') {
-            return this.renderLoading()
         }
+    }
+
+    render(): JSX.Element
+    {
+        let data = this.props.data
 
         return (
             <Container>

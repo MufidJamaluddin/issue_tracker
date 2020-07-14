@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using System;
 using System.Globalization;
 
 /**
@@ -24,7 +22,7 @@ namespace IssueTracker.Middleware
                     is_cookie_used = true;
                 }
 
-                if (String.IsNullOrEmpty(headerToken))
+                if (string.IsNullOrEmpty(headerToken))
                 {
                     is_cookie_used = true;
                 }
@@ -37,7 +35,7 @@ namespace IssueTracker.Middleware
                     }
 
                     context.Request.Headers.Add("Authorization",
-                        string.Format(CultureInfo.CurrentCulture, "Bearer {0}", cookieToken)
+                        string.Format(CultureInfo.InvariantCulture, "Bearer {0}", cookieToken)
                     );
                 }
 

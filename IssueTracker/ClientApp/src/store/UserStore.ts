@@ -4,8 +4,6 @@ import PaginationResponseModel from './shared/PaginationResponseModel';
 import MessageResponseModel from './shared/MessageResponseModel';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 
-// -----------------
-// STATE - This defines the type of data maintained in the Redux store.
 
 export interface UserState {
     isLoading: boolean
@@ -23,9 +21,6 @@ export interface UserItem {
     confirm_password?: string
 }
 
-// -----------------
-// ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
-// They do not themselves have any side-effects; they just describe something that is going to happen.
 
 interface RequestUserAction {
     type: 'REQUEST_USER'
@@ -43,15 +38,10 @@ interface ClearSearchUserAction {
     type: 'CLEAR_SEARCH_USER'
 }
 
-// Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
-// declared type strings (and not any other arbitrary string).
 
 type KnownAction = RequestUserAction | ReceiveUserAction
     | StartLoadingAction | EndLoadingAction | ClearSearchUserAction
 
-// ----------------
-// ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
-// They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
 
@@ -83,7 +73,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })
@@ -104,10 +93,8 @@ export const actionCreators = {
         }
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
-const unloadedState: UserState = {
+export const unloadedState: UserState = {
     isLoading: false,
     data: {
         status: true,

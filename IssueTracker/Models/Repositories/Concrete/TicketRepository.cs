@@ -165,10 +165,10 @@ namespace IssueTracker.Models.Repositories
                 Description = data.Description,
                 CreatedDate = data.CreatedDate,
 
-                Assignee = assignee,
-                Owner = owner,
-                Category = category,
-                Status = status,
+                AssigneeId = assignee.Id,
+                OwnerId = owner.Id,
+                CategoryId = category.Id,
+                StatusId = status.Id,
             };
 
             DbContext.Add(ticketData);
@@ -233,7 +233,7 @@ namespace IssueTracker.Models.Repositories
 
             Ticket lastData = DbContext.Tickets.Where(u => u.Id == data.Id).FirstOrDefault();
 
-            if(lastData == null)
+            if (lastData == null)
             {
                 return new CommonResponse<TicketVM>
                 {
@@ -250,17 +250,17 @@ namespace IssueTracker.Models.Repositories
 
             if (assignee != null)
             {
-                lastData.Assignee = assignee;
+                lastData.AssigneeId = assignee.Id;
             }
 
             if (category != null)
             {
-                lastData.Category = category;
+                lastData.CategoryId = category.Id;
             }
 
             if (status != null && lastData.Assignee?.Id == loggedUserId)
             {
-                lastData.Status = status;
+                lastData.StatusId = status.Id;
             }
 
             //DbContext.Add(lastData);
@@ -345,17 +345,17 @@ namespace IssueTracker.Models.Repositories
 
             if (assignee != null)
             {
-                lastData.Assignee = assignee;
+                lastData.AssigneeId = assignee.Id;
             }
 
             if (category != null)
             {
-                lastData.Category = category;
+                lastData.CategoryId = category.Id;
             }
 
             if (status != null)
             {
-                lastData.Status = status;
+                lastData.StatusId = status.Id;
             }
 
             //DbContext.Add(lastData);
@@ -470,7 +470,7 @@ namespace IssueTracker.Models.Repositories
 
         public TicketVM GetOne(TicketVM searchedData, string loggedUserId)
         {
-            var data = this.GetOne(searchedData);
+            TicketVM data = GetOne(searchedData);
 
             data.SetLoggedUser(loggedUserId);
 

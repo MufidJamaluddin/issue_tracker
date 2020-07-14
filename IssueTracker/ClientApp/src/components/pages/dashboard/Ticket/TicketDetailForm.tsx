@@ -4,6 +4,8 @@ import { Col, Label, FormGroup, Input } from 'reactstrap'
 import { TicketItem } from '../../../../store/TicketStore'
 
 import SelectTicketStatuses from './SelectTicketStatuses'
+import CategorySearchField from './CategorySearchField'
+import UserSearchField from './UserSearchField'
 
 export interface TicketDetailFormItemProps {
     data: TicketItem
@@ -66,21 +68,15 @@ class TicketDetailForm extends React.PureComponent<TicketDetailFormItemProps>
                     </FormGroup>
                 </Col>
 
-                <Col md={md}>
-                    <FormGroup row className="thin-padding-right">
-                        <Label for="ticket_src_category_name" className="text-left" sm={3}>Category Name</Label>
-                        <Col sm={9}>
-                            <Input
-                                type="text"
-                                name="category_name"
-                                id="ticket_src_category_name"
-                                placeholder="Category Name"
-                                defaultValue={data.category_name}
-                                readOnly={readOnly}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col>
+                <CategorySearchField
+                    md={md}
+                    readOnly={readOnly}
+                    fieldText="Category Name"
+                    fieldName="category_name"
+                    fieldIDName="category_id"
+                    defaultValue={data.category_name}
+                    dataSize={5}
+                />
 
                 <Col md={md}>
                     <FormGroup row className="thin-padding-right">
@@ -130,37 +126,25 @@ class TicketDetailForm extends React.PureComponent<TicketDetailFormItemProps>
                     </FormGroup>
                 </Col>
 
-                <Col md={md}>
-                    <FormGroup row className="thin-padding-right">
-                        <Label for="ticket_src_assignee" className="text-left" sm={3}>Assignee</Label>
-                        <Col sm={9}>
-                            <Input
-                                type="text"
-                                name="assignee"
-                                id="ticket_src_assignee"
-                                placeholder="Assignee"
-                                defaultValue={data.assignee}
-                                readOnly={readOnly || (!data.ismyownticket)}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col>
+                <UserSearchField
+                    md={md}
+                    readOnly={readOnly || (!data.ismyownticket)}
+                    fieldText="Assignee"
+                    fieldName="assignee"
+                    fieldIDName="assignee_id"
+                    defaultValue={data.assignee}
+                    dataSize={5}
+                />
 
-                <Col md={md}>
-                    <FormGroup row className="thin-padding-right">
-                        <Label for="ticket_src_owner" className="text-left" sm={3}>Owner</Label>
-                        <Col sm={9}>
-                            <Input
-                                type="text"
-                                name="owner"
-                                id="ticket_src_assignee"
-                                placeholder="Assignee"
-                                defaultValue={data.owner}
-                                readOnly={readOnly || (!data.ismyownticket)}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col>
+                <UserSearchField
+                    md={md}
+                    readOnly={readOnly || (!data.ismyownticket)}
+                    fieldText="Owner"
+                    fieldName="owner"
+                    fieldIDName="owner_id"
+                    defaultValue={data.owner}
+                    dataSize={5}
+                />
 
             </>
         )

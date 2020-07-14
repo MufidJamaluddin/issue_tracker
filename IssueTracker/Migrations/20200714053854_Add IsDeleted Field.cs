@@ -7,7 +7,10 @@ namespace IssueTracker.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            if (migrationBuilder == null) throw new ArgumentNullException(nameof(migrationBuilder));
+            if (migrationBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(migrationBuilder));
+            }
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
@@ -41,7 +44,10 @@ namespace IssueTracker.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            if (migrationBuilder == null) throw new ArgumentNullException(nameof(migrationBuilder));
+            if (migrationBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(migrationBuilder));
+            }
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_TR_LOG",

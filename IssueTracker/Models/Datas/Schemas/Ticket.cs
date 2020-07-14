@@ -20,11 +20,19 @@ namespace IssueTracker.Models.Datas.Schemas
 
         public User Assignee { get; set; }
 
+        public string AssigneeId { get; set; }
+
         public User Owner { get; set; }
+
+        public string OwnerId { get; set; }
 
         public Category Category { get; set; }
 
+        public string CategoryId { get; set; }
+
         public TicketStatus Status { get; set; }
+
+        public string StatusId { get; set; }
 
         public ICollection<TicketHistory> TicketHistories { get; set; }
         public bool IsDeleted { get; set; }

@@ -30,7 +30,7 @@ namespace IssueTracker.Services.Concrete
 
         public UserVM GetDataById(string id)
         {
-            return this.UserRepository.GetOne(new UserVM { Id = id });
+            return UserRepository.GetOne(new UserVM { Id = id });
         }
 
         public IEnumerable<UserVM> GetAllData()

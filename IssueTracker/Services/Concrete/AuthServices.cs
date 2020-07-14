@@ -46,7 +46,7 @@ namespace IssueTracker.Services.Concrete
 
             UserVM user = _userRepository.GetOne(new UserVM { Email = model?.Email });
 
-            if(user == null)
+            if (user == null)
             {
                 return new CommonSResponse<AuthenticateResponse>
                 {

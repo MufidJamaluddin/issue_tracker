@@ -4,8 +4,6 @@ import PaginationResponseModel from './shared/PaginationResponseModel';
 import MessageResponseModel from './shared/MessageResponseModel';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 
-// -----------------
-// STATE - This defines the type of data maintained in the Redux store.
 
 export interface TicketState {
     isLoading: boolean
@@ -18,8 +16,11 @@ export interface TicketItem {
     name: string
     description: string
     created_date: string
+    assignee_id: string
     assignee: string
+    owner_id: string
     owner: string
+    category_id: string
     category_name: string
     status: string
     status_id: string
@@ -28,9 +29,6 @@ export interface TicketItem {
     ismyassignedticket?: boolean
 }
 
-// -----------------
-// ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
-// They do not themselves have any side-effects; they just describe something that is going to happen.
 
 interface RequestTicketAction {
     type: 'REQUEST_TICKET'
@@ -48,15 +46,10 @@ interface ClearSearchTicketAction {
     type: 'CLEAR_SEARCH_TICKET'
 }
 
-// Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
-// declared type strings (and not any other arbitrary string).
 
 type KnownAction = RequestTicketAction | ReceiveTicketAction
     | StartLoadingAction | EndLoadingAction | ClearSearchTicketAction
 
-// ----------------
-// ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
-// They don't directly mutate state, but they can have external side-effects (such as loading data).
 
 export const actionCreators = {
 
@@ -87,7 +80,6 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })
@@ -110,8 +102,6 @@ export const actionCreators = {
 
 };
 
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const unloadedState: TicketState = {
     isLoading: false,
