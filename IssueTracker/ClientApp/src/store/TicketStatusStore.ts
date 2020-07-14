@@ -35,7 +35,7 @@ export const actionCreators = {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
                 .then(

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.Models.Datas.Schemas
 {
-    public class User
+    public class User : IBaseModel
     {
         [Key]
         [StringLength(7)]
@@ -32,5 +32,6 @@ namespace IssueTracker.Models.Datas.Schemas
         public ICollection<UserHistory> UserHistories { get; set; }
 
         public ICollection<TableTransaction> Transactions { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

@@ -32,11 +32,25 @@ class SelectTicketStatuses extends React.PureComponent<{
                 defaultValue={this.props.defaultValue}
                 readOnly={is_only_view}
             >
-                <option key="0" value={''}>All Status</option>
+                {
+                    (!is_only_view) &&
+                    <option key="0" value={''}>All Status</option>
+                }
                 {
                     this.props.data &&
                     this.props.data.map(item => {
-                        return (<option key={item.id} value={item.id}>{item.name}</option>)
+
+                        let show = true
+
+                        if (is_only_view)
+                        {
+                            show = this.props.defaultValue == item.id
+                        }
+
+                        if (show)
+                        {
+                            return (<option key={item.id} value={item.id}>{item.name}</option>)
+                        }
                     })
                 }
             </Input>

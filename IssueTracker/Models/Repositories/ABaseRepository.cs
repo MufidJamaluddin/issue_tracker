@@ -1,5 +1,6 @@
 ﻿using IssueTracker.Helpers;
 using IssueTracker.Models.Datas;
+using IssueTracker.Models.ViewModels;
 using IssueTracker.Models.ViewModels.Shared;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace IssueTracker.Models.Repositories
 {
-    public abstract class ABaseRepository<T> : IBaseRepository<T>
+    public abstract class ABaseRepository<T> : IBaseRepository<T> where T : BaseVM
     {
         protected IssueTrackerDbContext DbContext { get; set; }
 
@@ -30,7 +31,9 @@ namespace IssueTracker.Models.Repositories
 
             if (searchedData != null)
             {
-                IQueryable<T> searchedModel = model.Where(u => u.Equals(searchedData));
+                IQueryable<T> searchedModel = model
+                    .Where(u => u.Equals(searchedData))
+                    .Where(u => u.IsDeleted != true);
 
                 return searchedModel;
             }

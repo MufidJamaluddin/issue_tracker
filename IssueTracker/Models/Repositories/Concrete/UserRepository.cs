@@ -23,6 +23,7 @@ namespace IssueTracker.Models.Repositories
                 Role = u.Role,
                 Image = u.Image,
                 Password = u.Password,
+                IsDeleted = u.IsDeleted,
             });
 
             return model;
@@ -41,6 +42,8 @@ namespace IssueTracker.Models.Repositories
                     u.Id == id
             );
 
+            model = model.Where(u => u.IsDeleted != true);
+
             return model;
         }
 
@@ -52,6 +55,8 @@ namespace IssueTracker.Models.Repositories
             string id = request?.SearchData?.Id;
             string name = request?.SearchData?.Name;
             string role = request?.SearchData?.Role;
+
+            model = model.Where(u => u.IsDeleted != true);
 
             if (!string.IsNullOrEmpty(email))
             {
@@ -140,7 +145,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Retrieve Data is Success!",
+                    Message = "Save Data is Success!",
                     Data = new UserVM[] { data },
                 };
             }
@@ -272,7 +277,7 @@ namespace IssueTracker.Models.Repositories
                 .OrderByDescending(u => u)
                 .FirstOrDefault() ?? 0;
 
-            DbContext.Remove(lastData);
+            lastData.IsDeleted = true;
 
             UserHistory userHistory = new UserHistory();
             userHistory.FillFromUser(

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.Models.ViewModels
 {
-    public class TicketStatusVM
+    public class TicketStatusVM : BaseVM
     {
         [StringLength(6)]
         [JsonProperty(PropertyName = "id")]

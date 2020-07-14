@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.Models.Datas.Schemas
 {
-    public class TicketStatus
+    public class TicketStatus : IBaseModel
     {
         [Key]
         [StringLength(6)]
@@ -18,5 +18,6 @@ namespace IssueTracker.Models.Datas.Schemas
         public string Color { get; set; }
 
         public ICollection<TicketStatusHistory> TicketStatusHistories { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

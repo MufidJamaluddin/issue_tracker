@@ -43,11 +43,33 @@ class User extends React.PureComponent<UserProps>
         return (
             <Container>
                 <h1 className="text-center">User</h1>
-                <UserSearchForm
-                    onSubmit={this.onSearchSubmit}
-                    searchData={this.props.searchedData}
-                    onClear={this.props.clearSearchUser}
-                />
+
+                <Row>
+                    <Link to='/dashboard/newuser/'>
+                        <Button color="light">
+                            <span><i className="fa fa-plus" /></span>
+                            &nbsp; Add New User
+                        </Button>    
+                    </Link>
+                </Row>
+
+                <br/>
+
+                <Row sm="12">
+                    <Col md="1">
+                        <b>
+                            Search
+                        </b>    
+                    </Col>
+                    <Col md="11">
+                        <UserSearchForm
+                            onSubmit={this.onSearchSubmit}
+                            searchData={this.props.searchedData}
+                            onClear={this.props.clearSearchUser}
+                            />
+                    </Col>
+                </Row>
+
                 {
                     this.renderTableSection()
                 }

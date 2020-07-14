@@ -1,5 +1,6 @@
 using IssueTracker.Helpers;
 using IssueTracker.Helpers.Logger;
+using IssueTracker.Middleware;
 using IssueTracker.Models;
 using IssueTracker.Models.Datas;
 using IssueTracker.ToDevs;
@@ -172,6 +173,8 @@ namespace IssueTracker
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+
+            app.UseJwtInCookie();
 
             app.UseAuthentication();
             app.UseAuthorization();

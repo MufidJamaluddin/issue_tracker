@@ -35,6 +35,19 @@ interface RequestUpdateOneUserAction {
     data: UserItem
 }
 
+interface RequestBlankOneUserAction {
+    type: 'REQUEST_BLANK_ONE_USER'
+}
+
+interface RequestInsertOneUserAction {
+    type: 'REQUEST_INSERT_ONE_USER'
+}
+
+interface ReceiveInsertOneUserAction {
+    type: 'RECEIVE_INSERT_ONE_USER'
+    data: MessageResponseModel & OneUserState
+}
+
 interface ReceiveUpdateOneUserAction {
     type: 'RECEIVE_UPDATE_ONE_USER'
     data: MessageResponseModel & OneUserState
@@ -50,7 +63,8 @@ interface ReceiveDeleteOneUserAction {
     data: MessageResponseModel & OneUserState
 }
 
-type KnownAction = RequestOneUserAction | ReceiveOneUserAction
+type KnownAction = RequestOneUserAction | ReceiveOneUserAction | RequestBlankOneUserAction
+    | RequestInsertOneUserAction | ReceiveInsertOneUserAction
     | RequestUpdateOneUserAction | ReceiveUpdateOneUserAction
     | RequestDeleteOneUserAction | ReceiveDeleteOneUserAction
     | StartLoadingAction | EndLoadingAction
@@ -73,7 +87,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
                     .then(
@@ -89,6 +103,57 @@ export const actionCreators = {
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_ONE_USER', id: id });
+            }
+        },
+
+
+    requestBlankOneUser: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.ticketStoreDetail &&
+                appState.ticketStoreDetail.data.id !== '' &&
+                appState.ticketStoreDetail.data.id !== null
+            ) {
+                dispatch({ type: 'REQUEST_BLANK_ONE_USER' })
+            }
+        },
+
+    requestInsertOneUser: (data: UserItem):
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.ticketStoreDetail &&
+                data.id == null
+            ) {
+                fetch('api/user', {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(
+                    response => response.json() as Promise<MessageResponseModel & OneUserState>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_INSERT_ONE_USER', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
+
+                dispatch({ type: 'START_LOADING' });
+                dispatch({ type: 'REQUEST_INSERT_ONE_USER' });
             }
         },
 
@@ -108,7 +173,7 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${appState.authStore.data.token}`
+                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -144,7 +209,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
@@ -173,7 +238,7 @@ export const actionCreators = {
 
 const unloadedState: OneUserState = {
     data: {
-        id: '',
+        id: null,
         name: '',
         email: '',
         image: '',
@@ -211,7 +276,17 @@ export const reducer: Reducer<OneUserState> = (
     let newState = null;
 
     switch (action.type) {
+        case 'REQUEST_BLANK_ONE_USER':
+            newState = merge({}, state)
+
+            newState = {
+                data: getRequiredData()
+            }
+
+            return newState
+
         case 'REQUEST_ONE_USER':
+        case 'REQUEST_INSERT_ONE_USER':
         case 'REQUEST_UPDATE_ONE_USER':
         case 'REQUEST_DELETE_ONE_USER':
 
@@ -228,6 +303,7 @@ export const reducer: Reducer<OneUserState> = (
             return newState
 
         case 'RECEIVE_UPDATE_ONE_USER':
+        case 'RECEIVE_INSERT_ONE_USER':
 
             newState = merge({}, state)
 

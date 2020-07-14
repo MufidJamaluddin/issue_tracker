@@ -1,9 +1,12 @@
-﻿using IssueTracker.Models;
+﻿using IssueTracker.Middleware;
+using IssueTracker.Models;
 using IssueTracker.Models.ViewModels;
 using IssueTracker.Models.ViewModels.Shared;
 using IssueTracker.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 
 namespace IssueTracker.Controllers.Api
@@ -41,8 +44,45 @@ namespace IssueTracker.Controllers.Api
         {
             string clientIpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
 
-            return AuthService.Authenticate(request, clientIpAddress);
+            var data = AuthService.Authenticate(request, clientIpAddress);
+
+            if(data?.Data?.Token != null)
+            {
+                var cookieOptions = new CookieOptions()
+                {
+                    Path = "/",
+                    Expires = DateTimeOffset.UtcNow.AddDays(7),
+                    IsEssential = true,
+                    HttpOnly = true,
+                    Secure = false,
+                };
+
+                Response.Cookies.Append(
+                    JwtInCookieMiddleware.JWT_COOKIE_KEY, 
+                    data.Data.Token,
+                    cookieOptions
+                );
+            }
+
+            return data;
         }
 
+
+        /// <summary>
+        /// Logout for delete token.
+        /// </summary>
+        [HttpDelete]
+        public CommonResponse<Object> Logout()
+        {
+            Response.Cookies.Delete(JwtInCookieMiddleware.JWT_COOKIE_KEY);
+
+            return new CommonResponse<object>
+            {
+                Code = "S",
+                Message = "Logout Successed!",
+                Status = true,
+                Data = null,
+            };
+        }
     }
 }

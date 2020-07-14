@@ -149,7 +149,7 @@ namespace IssueTracker.Services.Concrete
                 {
                     Status = false,
                     Code = "E-003",
-                    Message = "Save Data Failed! Please Contact an Web Administrator!",
+                    Message = "Delete Data Failed! Please Contact an Web Administrator!",
                     Data = new UserVM[] { data },
                 };
             }

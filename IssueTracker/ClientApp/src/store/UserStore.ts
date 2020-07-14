@@ -19,6 +19,8 @@ export interface UserItem {
     email: string
     image?: string
     role?: string
+    password?: string
+    confirm_password?: string
 }
 
 // -----------------
@@ -81,7 +83,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify(requestData)
                 })

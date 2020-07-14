@@ -79,6 +79,31 @@ export const actionCreators = {
     requestLogout: ():
         AppThunkAction<KnownAction> => (dispatch, getState) => {
 
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.authStore &&
+                appState.authStore.data.token != null &&
+                appState.authStore.data.token != undefined
+            ) {
+                fetch(`api/login`, {
+                    method: 'DELETE',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => {
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
+
+                dispatch({ type: 'START_LOADING' });
+            }
+
             dispatch({ type: 'REQUEST_LOGOUT' });
         },
 
@@ -97,12 +122,14 @@ const unloadedState: LoginState = {
     status: true,
 };
 
-const LOCAL_STORAGE_KEY = "ISSUE_TRACKER_USER";
+//const LOCAL_STORAGE_KEY = "ISSUE_TRACKER_USER";
 
 export const reducer: Reducer<LoginState> = (
     state: LoginState | undefined, incomingAction: Action): LoginState => {
+
     if (state === undefined)
     {
+        /*
         let currentUser = localStorage.getItem(LOCAL_STORAGE_KEY);
 
         if (currentUser !== null)
@@ -114,6 +141,7 @@ export const reducer: Reducer<LoginState> = (
                 return { ...unloadedState, data: userData }
             }
         }
+        */
 
         return unloadedState;
     }
@@ -135,7 +163,7 @@ export const reducer: Reducer<LoginState> = (
 
             newState = { ...unloadedState }
 
-            localStorage.removeItem(LOCAL_STORAGE_KEY)
+            //localStorage.removeItem(LOCAL_STORAGE_KEY)
 
             return newState
 
@@ -146,10 +174,12 @@ export const reducer: Reducer<LoginState> = (
                 ...action.data,
             }
 
+            /*
             localStorage.setItem(
                 LOCAL_STORAGE_KEY,
                 JSON.stringify(action.data.data)
             )
+            */
 
             return newState
 

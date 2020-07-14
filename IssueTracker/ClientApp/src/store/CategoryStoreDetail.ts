@@ -31,6 +31,21 @@ interface ReceiveOneCategoryAction
     data: CategoryItem
 }
 
+interface RequestBlankOneCategoryAction
+{
+    type: 'REQUEST_BLANK_ONE_CATEGORY'
+}
+
+interface RequestInsertOneCategoryAction
+{
+    type: 'REQUEST_INSERT_ONE_CATEGORY'
+}
+
+interface ReceiveInsertOneCategoryAction {
+    type: 'RECEIVE_INSERT_ONE_CATEGORY'
+    data: MessageResponseModel & OneCategoryState
+}
+
 interface RequestUpdateOneCategoryAction
 {
     type: 'REQUEST_UPDATE_ONE_CATEGORY'
@@ -56,7 +71,8 @@ interface ReceiveDeleteOneCategoryAction
     data: MessageResponseModel & OneCategoryState
 }
 
-type KnownAction = RequestOneCategoryAction | ReceiveOneCategoryAction
+type KnownAction = RequestOneCategoryAction | ReceiveOneCategoryAction | RequestBlankOneCategoryAction
+    | RequestInsertOneCategoryAction | ReceiveInsertOneCategoryAction
     | RequestUpdateOneCategoryAction | ReceiveUpdateOneCategoryAction
     | RequestDeleteOneCategoryAction | ReceiveDeleteOneCategoryAction
     | StartLoadingAction | EndLoadingAction
@@ -80,7 +96,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
                 .then(
@@ -96,6 +112,56 @@ export const actionCreators = {
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_ONE_CATEGORY', id: id });
+            }
+        },
+
+    requestBlankOneCategory: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.categoryStoreDetail &&
+                appState.categoryStoreDetail.data.id !== '' &&
+                appState.categoryStoreDetail.data.id !== null
+            ) {
+                dispatch({ type: 'REQUEST_BLANK_ONE_CATEGORY' })
+            }
+        },
+
+    requestInsertOneCategory: (data: CategoryItem):
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.categoryStoreDetail &&
+                data.id == null
+            ) {
+                fetch('api/category', {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(
+                    response => response.json() as Promise<MessageResponseModel & OneCategoryState>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_INSERT_ONE_CATEGORY', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
+
+                dispatch({ type: 'START_LOADING' });
+                dispatch({ type: 'REQUEST_INSERT_ONE_CATEGORY' });
             }
         },
 
@@ -116,7 +182,7 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${appState.authStore.data.token}`
+                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -152,7 +218,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
@@ -181,7 +247,7 @@ export const actionCreators = {
 
 const unloadedState: OneCategoryState = {
     data: {
-        id: '',
+        id: null,
         name: ''
     },
     status: true,
@@ -218,7 +284,21 @@ export const reducer: Reducer<OneCategoryState> = (
 
     switch (action.type)
     {
+        case 'REQUEST_BLANK_ONE_CATEGORY':
+
+            newState = merge({}, state)
+
+            newState = {
+                data: getRequiredData(),
+                status: true,
+                code: '',
+                message: '',
+            }
+
+            return newState
+
         case 'REQUEST_ONE_CATEGORY':
+        case 'REQUEST_INSERT_ONE_CATEGORY':
         case 'REQUEST_UPDATE_ONE_CATEGORY':
         case 'REQUEST_DELETE_ONE_CATEGORY':
 
@@ -229,12 +309,16 @@ export const reducer: Reducer<OneCategoryState> = (
             newState = merge({}, state)
 
             newState = {
-                data: getRequiredData(action.data)
+                data: getRequiredData(action.data),
+                status: true,
+                code: '',
+                message: '',
             }
 
             return newState
 
         case 'RECEIVE_UPDATE_ONE_CATEGORY':
+        case 'RECEIVE_INSERT_ONE_CATEGORY':
 
             newState = merge({}, state)
 

@@ -10,6 +10,10 @@ import CategoryDetail from './components/pages/dashboard/Category/CategoryDetail
 import TicketDetail from './components/pages/dashboard/Ticket/TicketDetail';
 import UserDetail from './components/pages/dashboard/User/UserDetail';
 
+import NewCategory from './components/pages/dashboard/Category/NewCategory';
+import NewTicket from './components/pages/dashboard/Ticket/NewTicket';
+import NewUser from './components/pages/dashboard/User/NewUser';
+
 export default interface RoutesItem {
     path: string,
     exact: boolean,
@@ -24,13 +28,22 @@ const DashboardRoutes: RoutesItem[] = [
         path: '/dashboard/category', exact: true, component: Category,
     },
     {
+        path: '/dashboard/newcategory', exact: true, component: NewCategory,
+    },
+    {
         path: '/dashboard/category/:id/:status', exact: false, component: CategoryDetail,
     },
     {
         path: '/dashboard/ticket', exact: true, component: Ticket,
     },
     {
+        path: '/dashboard/newticket', exact: true, component: NewTicket,
+    },
+    {
         path: '/dashboard/ticket/:id/:status', exact: false, component: TicketDetail,
+    },
+    {
+        path: '/dashboard/newuser', exact: true, component: NewUser,
     },
     {
         path: '/dashboard/user', exact: true, component: User,

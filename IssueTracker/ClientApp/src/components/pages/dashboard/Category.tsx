@@ -56,11 +56,33 @@ class Category extends React.PureComponent<CategoryProps>
         return (
             <Container>
                 <h1 className="text-center">Category</h1>
-                <CategorySearchForm
-                    onSubmit={this.onSearchSubmit}
-                    searchData={this.props.searchedData}
-                    onClear={this.props.clearSearchCategory}
-                />
+
+                <Row sm="12">
+                    <Link to='/dashboard/newcategory/'>
+                        <Button color="light">
+                            <span><i className="fa fa-plus" /></span>
+                            &nbsp; Add New Category
+                        </Button>    
+                    </Link>
+                </Row>
+
+                <br/>
+
+                <Row sm="12">
+                    <Col md="1">
+                        <b>
+                            Search
+                        </b>
+                    </Col>    
+                    <Col md="11">
+                        <CategorySearchForm
+                            onSubmit={this.onSearchSubmit}
+                            searchData={this.props.searchedData}
+                            onClear={this.props.clearSearchCategory}
+                            />
+                    </Col>
+                </Row>
+
                 {
                     this.renderTableSection()
                 }

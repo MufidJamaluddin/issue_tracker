@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.Models.Datas.Schemas
 {
-    public class Ticket
+    public class Ticket : IBaseModel
     {
         [Key]
         [StringLength(6)]
@@ -27,5 +27,6 @@ namespace IssueTracker.Models.Datas.Schemas
         public TicketStatus Status { get; set; }
 
         public ICollection<TicketHistory> TicketHistories { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

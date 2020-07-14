@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IssueTracker.Models.Datas.Schemas
 {
-    public class Category
+    public class Category : IBaseModel
     {
         [Key]
         [StringLength(6)]
@@ -14,5 +14,6 @@ namespace IssueTracker.Models.Datas.Schemas
         public string Name { get; set; }
 
         public ICollection<CategoryHistory> CategoryHistories { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

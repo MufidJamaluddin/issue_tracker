@@ -19,6 +19,7 @@ namespace IssueTracker.Models.Repositories
             {
                 Id = category.Id,
                 Name = category.Name,
+                IsDeleted = category.IsDeleted,
             };
         }
 
@@ -33,7 +34,7 @@ namespace IssueTracker.Models.Repositories
         {
             IQueryable<CategoryVM> model = GetModel();
 
-            model = model.Where(u => u.Id == searchedData.Id);
+            model = model.Where(u => u.Id == searchedData.Id && u.IsDeleted != true);
 
             return model;
         }
@@ -41,6 +42,8 @@ namespace IssueTracker.Models.Repositories
         public override IQueryable<CategoryVM> GetSearchedModel(SearchPaginationRequest<CategoryVM> request)
         {
             IQueryable<CategoryVM> model = GetModel();
+
+            model = model.Where(u => u.IsDeleted != true);
 
             if (!string.IsNullOrEmpty(request?.SearchData?.Id))
             {
@@ -112,7 +115,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Retrieve Data is Success!",
+                    Message = "Save Data is Success!",
                     Data = new CategoryVM[] { data },
                 };
             }
@@ -256,7 +259,7 @@ namespace IssueTracker.Models.Repositories
                 .OrderByDescending(u => u)
                 .FirstOrDefault() ?? 0;
 
-            DbContext.Remove(lastData);
+            lastData.IsDeleted = true;
 
             CategoryHistory categoryDataHistory = new CategoryHistory();
             categoryDataHistory.FillFromCategory(

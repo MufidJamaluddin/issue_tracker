@@ -32,6 +32,8 @@ namespace IssueTracker.Models.Repositories
                 StatusName = u.Status.Name,
                 StatusID = u.Status.Id,
                 StatusColor = u.Status.Color,
+
+                IsDeleted = u.IsDeleted,
             });
 
             return model;
@@ -41,7 +43,7 @@ namespace IssueTracker.Models.Repositories
         {
             IQueryable<TicketVM> model = GetModel();
 
-            model = model.Where(u => u.Id == searchedData.Id);
+            model = model.Where(u => u.Id == searchedData.Id && u.IsDeleted != true);
 
             return model;
         }
@@ -54,6 +56,8 @@ namespace IssueTracker.Models.Repositories
             string name = request?.SearchData?.Name;
             string myuserid = request?.SearchData?.MyUserId;
             string statusID = request?.SearchData?.StatusID;
+
+            model = model.Where(u => u.IsDeleted != true);
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -430,7 +434,7 @@ namespace IssueTracker.Models.Repositories
                 .OrderByDescending(u => u)
                 .FirstOrDefault() ?? 0;
 
-            DbContext.Tickets.Remove(lastData);
+            lastData.IsDeleted = true;
 
             TicketHistory ticketHistory = new TicketHistory();
             ticketHistory.FillFromTicket(
@@ -462,6 +466,15 @@ namespace IssueTracker.Models.Repositories
                     Data = new TicketVM[] { data },
                 };
             }
+        }
+
+        public TicketVM GetOne(TicketVM searchedData, string loggedUserId)
+        {
+            var data = this.GetOne(searchedData);
+
+            data.SetLoggedUser(loggedUserId);
+
+            return data;
         }
     }
 }

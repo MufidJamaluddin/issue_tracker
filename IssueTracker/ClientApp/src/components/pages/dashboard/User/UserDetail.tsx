@@ -1,6 +1,6 @@
 ﻿import * as React from 'react'
 
-import { Row, Col, Form, Label, FormGroup, Button, Input, Alert, Container, Spinner } from 'reactstrap'
+import { Row, Col, Form, Button, Alert, Container, Spinner } from 'reactstrap'
 import { UserItem } from '../../../../store/UserStore'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { compose } from 'redux'
@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import * as UserStoreDetail from '../../../../store/UserStoreDetail'
 import { ApplicationState } from '../../../../store'
 import { Link } from 'react-router-dom'
+import UserDetailForm from './UserDetailForm'
 
 export interface UserDetailItemProps
 {
@@ -56,7 +57,7 @@ class UserDetail extends React.PureComponent<UserDetailProps>
                     }
                     <Col md="12">
                         {
-                            (this.props.code === null && this.props.code === '') &&
+                            (this.props.code === null || this.props.code === '') &&
                             <Spinner />
                         }
                     </Col>
@@ -126,72 +127,21 @@ class UserDetail extends React.PureComponent<UserDetailProps>
                             </Col>
                         }
 
-                        <Col md="12">
+                        <Col md="8">
                             <h1 className="display-4 text-center">{title} User {user_id}</h1>
                             <br />
                         </Col>
 
-                        <Col md="8">
-                            <FormGroup row className="thin-padding-right">
-                                <Label for="user_src_id" className="text-left" sm={3}>ID</Label>
-                                <Col sm={9}>
-                                    <Input
-                                        type="text"
-                                        name="id"
-                                        id="user_src_id"
-                                        defaultValue={data.id}
-                                        readOnly={is_only_view}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                        <UserDetailForm
+                            md="8"
+                            data={data}
+                            readOnly={is_only_view}
+                            readOnlyID={true}
+                            showID={true}
+                        />
 
                         <Col md="8">
-                            <FormGroup row className="thin-padding-right">
-                                <Label for="User_src_name" className="text-left" sm={3}>Name</Label>
-                                <Col sm={9}>
-                                    <Input
-                                        type="text"
-                                        name="name"
-                                        id="user_src_name"
-                                        defaultValue={data.name}
-                                        readOnly={is_only_view}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col md="8">
-                            <FormGroup row className="thin-padding-right">
-                                <Label for="user_src_email" className="text-left" sm={3}>Email</Label>
-                                <Col sm={9}>
-                                    <Input
-                                        type="email"
-                                        name="email"
-                                        id="user_src_email"
-                                        defaultValue={data.email}
-                                        readOnly={is_only_view}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col md="8">
-                            <FormGroup row className="thin-padding-right">
-                                <Label for="user_src_email" className="text-left" sm={3}>Role</Label>
-                                <Col sm={9}>
-                                    <Input
-                                        type="text"
-                                        name="role"
-                                        id="user_src_role"
-                                        defaultValue={data.role}
-                                        readOnly={is_only_view}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col md="8">
-                            <Link to="/dashboard/ticket">
+                            <Link to="/dashboard/user">
                                 <Button type="button" color="light">
                                     <span><i className="fa fa-chevron-left" /></span> &nbsp;
                                     Back

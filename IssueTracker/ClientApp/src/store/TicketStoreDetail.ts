@@ -23,6 +23,19 @@ interface ReceiveOneTicketAction {
     data: TicketItem
 }
 
+interface RequestBlankOneTicketAction {
+    type: 'REQUEST_BLANK_ONE_TICKET'
+}
+
+interface RequestInsertOneTicketAction {
+    type: 'REQUEST_INSERT_ONE_TICKET'
+}
+
+interface ReceiveInsertOneTicketAction {
+    type: 'RECEIVE_INSERT_ONE_TICKET'
+    data: MessageResponseModel & OneTicketState
+}
+
 interface RequestUpdateOneTicketAction {
     type: 'REQUEST_UPDATE_ONE_TICKET'
     id: string
@@ -44,7 +57,8 @@ interface ReceiveDeleteOneTicketAction {
     data: MessageResponseModel & OneTicketState
 }
 
-type KnownAction = RequestOneTicketAction | ReceiveOneTicketAction
+type KnownAction = RequestOneTicketAction | ReceiveOneTicketAction | RequestBlankOneTicketAction
+    | RequestInsertOneTicketAction | ReceiveInsertOneTicketAction
     | RequestUpdateOneTicketAction | ReceiveUpdateOneTicketAction
     | RequestDeleteOneTicketAction | ReceiveDeleteOneTicketAction
     | StartLoadingAction | EndLoadingAction
@@ -67,7 +81,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                 })
                     .then(
@@ -83,6 +97,56 @@ export const actionCreators = {
 
                 dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_ONE_TICKET', id: id });
+            }
+        },
+
+    requestBlankOneTicket: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.ticketStoreDetail &&
+                appState.ticketStoreDetail.data.id !== '' &&
+                appState.ticketStoreDetail.data.id !== null
+            ) {
+                dispatch({ type: 'REQUEST_BLANK_ONE_TICKET' })
+            }
+        },
+
+    requestInsertOneTicket: (data: TicketItem):
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.ticketStoreDetail &&
+                data.id == null
+            ) {
+                fetch('api/ticket', {
+                    method: 'POST',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(
+                    response => response.json() as Promise<MessageResponseModel & OneTicketState>
+                )
+                .then(data => {
+                    dispatch({ type: 'RECEIVE_INSERT_ONE_TICKET', data: data });
+                    dispatch({ type: 'END_LOADING' });
+                })
+                .catch(exception => {
+                    dispatch({ type: 'END_LOADING' });
+                });
+
+                dispatch({ type: 'START_LOADING' });
+                dispatch({ type: 'REQUEST_INSERT_ONE_TICKET' });
             }
         },
 
@@ -102,7 +166,7 @@ export const actionCreators = {
                         cache: 'no-cache',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${appState.authStore.data.token}`
+                            //'Authorization': `Bearer ${appState.authStore.data.token}`
                         },
                         body: JSON.stringify(data)
                     })
@@ -138,7 +202,7 @@ export const actionCreators = {
                     cache: 'no-cache',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appState.authStore.data.token}`
+                        //'Authorization': `Bearer ${appState.authStore.data.token}`
                     },
                     body: JSON.stringify({
                         id: id
@@ -167,7 +231,7 @@ export const actionCreators = {
 
 const unloadedState: OneTicketState = {
     data: {
-        id: '',
+        id: null,
         name: '',
         description: '',
         created_date: null,
@@ -215,7 +279,19 @@ export const reducer: Reducer<OneTicketState> = (
     let newState = null;
 
     switch (action.type) {
+
+        case 'REQUEST_BLANK_ONE_TICKET':
+
+            newState = merge({}, state)
+
+            newState = {
+                data: getRequiredData()
+            }
+
+            return newState
+
         case 'REQUEST_ONE_TICKET':
+        case 'REQUEST_INSERT_ONE_TICKET':
         case 'REQUEST_UPDATE_ONE_TICKET':
         case 'REQUEST_DELETE_ONE_TICKET':
 
@@ -232,6 +308,7 @@ export const reducer: Reducer<OneTicketState> = (
             return newState
 
         case 'RECEIVE_UPDATE_ONE_TICKET':
+        case 'RECEIVE_INSERT_ONE_TICKET':
 
             newState = merge({}, state)
 

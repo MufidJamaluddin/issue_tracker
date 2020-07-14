@@ -18,6 +18,7 @@ namespace IssueTracker.Models.Repositories
                 Id = u.Id,
                 Name = u.Name,
                 Color = u.Color,
+                IsDeleted = u.IsDeleted,
             });
 
             return model;
@@ -202,7 +203,7 @@ namespace IssueTracker.Models.Repositories
                 .OrderByDescending(u => u)
                 .FirstOrDefault();
 
-            DbContext.Remove(lastData);
+            lastData.IsDeleted = true;
 
             TicketStatusHistory ticketStatusHistory = new TicketStatusHistory();
             ticketStatusHistory.FillFromTicketStatus(

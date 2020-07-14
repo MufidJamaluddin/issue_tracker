@@ -73,11 +73,33 @@ class Ticket extends React.PureComponent<TicketProps>
         return (
             <Container>
                 <h1 className="text-center">Ticket</h1>
-                <TicketSearchForm
-                    onSubmit={this.onSearchSubmit}
-                    searchData={searchedData}
-                    onClear={this.props.clearSearchTicket}
-                />
+
+                <Row sm="12">
+                    <Link to='/dashboard/newticket/'>
+                        <Button color="light">
+                            <span><i className="fa fa-plus" /></span>
+                            &nbsp; Add New Ticket
+                        </Button>    
+                    </Link>
+                </Row>
+
+                <br/>
+
+                <Row sm="12">
+                    <Col md="1">
+                        <b>
+                            Search
+                        </b>
+                    </Col>
+                    <Col md="12">
+                        <TicketSearchForm
+                            onSubmit={this.onSearchSubmit}
+                            searchData={searchedData}
+                            onClear={this.props.clearSearchTicket}
+                            />
+                    </Col>
+                </Row>
+
                 {
                     this.renderTableSection()
                 }
