@@ -171,7 +171,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = false,
                     Code = "E-001",
-                    Message = "Please fill the request data!",
+                    Message = "Please fill the required data!",
                 };
             }
 

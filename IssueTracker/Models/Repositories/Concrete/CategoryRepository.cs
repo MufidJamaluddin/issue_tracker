@@ -206,7 +206,7 @@ namespace IssueTracker.Models.Repositories
                 {
                     Status = true,
                     Code = "S",
-                    Message = "Save Data is Success!",
+                    Message = "Update Data is Success!",
                     Data = new CategoryVM[] { data },
                 };
             }

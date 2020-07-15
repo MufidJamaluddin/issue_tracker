@@ -14,6 +14,11 @@ const ProfileMenu = (props: any) => {
     let profileImg = props.image ? props.image : '_fox.jpg'
     let profileImgPath = `${process.env.PUBLIC_URL}/static/profile_min/${profileImg}`
 
+    if (props.name == null || props.name == '')
+    {
+        return null;
+    }
+
     return (
         <UncontrolledDropdown setActiveFromChild className="nav-item">
             <DropdownToggle caret className="nav-link" tag="p">

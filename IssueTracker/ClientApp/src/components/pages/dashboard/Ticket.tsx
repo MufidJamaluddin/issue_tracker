@@ -6,7 +6,7 @@ import { ApplicationState } from '../../../store'
 import * as TicketStore from '../../../store/TicketStore'
 
 import { withRouter } from 'react-router'
-import { Table, Col, Container, PaginationLink, Button, Row } from 'reactstrap'
+import { Table, Col, Container, PaginationLink, Button, Row, Alert } from 'reactstrap'
 
 import TicketSearchForm from './Ticket/TicketSearchForm'
 
@@ -163,7 +163,11 @@ class Ticket extends React.PureComponent<TicketProps>
                                     <td>{item.assignee}</td>
                                     <td>{item.owner}</td>
                                     <td>{item.category_name}</td>
-                                    <td>{item.status}</td>
+                                    <td>
+                                        <Alert color={item.status_color}>
+                                            {item.status}
+                                        </Alert>
+                                    </td>
                                     <td>
                                         <Link className="btn" color="light"
                                             to={`/dashboard/ticket/${item.id}/view`}>

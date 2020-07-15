@@ -56,17 +56,14 @@ class NavMenu extends React.PureComponent<NavMenuProps, { isOpen: boolean }>
 
     private renderProfile(): JSX.Element
     {
-        if (this.props.data.token == null)
-            return (null);
-        else
-            return (
-                <ProfileMenu
-                    name={this.props.data.name}
-                    email={this.props.data.email}
-                    image={this.props.data.image}
-                    logout_path={this.props.logout_path}
-                />
-            );
+        return (
+            <ProfileMenu
+                name={this.props.data.name}
+                email={this.props.data.email}
+                image={this.props.data.image}
+                logout_path={this.props.logout_path}
+            />
+        );
     }
 
     private toggle(): void

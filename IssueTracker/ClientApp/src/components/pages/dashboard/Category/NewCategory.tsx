@@ -51,6 +51,8 @@ class NewCategory extends React.PureComponent<NewCategoryProps>
     {
         let data = this.props.data
 
+        let is_successed = this.props.code == 'S'
+
         return (
             <Container>
                 <Form onSubmit={this.onSaveSubmit}>
@@ -64,20 +66,23 @@ class NewCategory extends React.PureComponent<NewCategoryProps>
                                 </Alert>
                             </Col>
                         }
+                        {
+                            (!is_successed) && 
+                            <>
+                                <Col md="12">
+                                    <h1 className="display-4 text-center">New Category</h1>
+                                    <br />
+                                </Col>
 
-                        <Col md="12">
-                            <h1 className="display-4 text-center">New Category</h1>
-                            <br />
-                        </Col>
-
-                        <CategoryDetailForm
-                            md="12"
-                            data={data}
-                            readOnly={false}
-                            readOnlyID={false}
-                            showID={false}
-                        />
-
+                                <CategoryDetailForm
+                                    md="12"
+                                    data={data}
+                                    readOnly={false}
+                                    readOnlyID={false}
+                                    showID={false}
+                                />
+                            </>
+                        }
                         <Col md="12">
                             <Link to="/dashboard/category">
                                 <Button type="button" color="light">
@@ -85,10 +90,13 @@ class NewCategory extends React.PureComponent<NewCategoryProps>
                                     Back
                                 </Button>
                             </Link>
-                            <Button type="submit" color="light">
-                                <span><i className="fa fa-floppy-o" /></span> &nbsp;
-                                Save
-                            </Button>
+                            {
+                                (!is_successed) &&
+                                <Button type="submit" color="light">
+                                    <span><i className="fa fa-floppy-o" /></span> &nbsp;
+                                        Save
+                                </Button>
+                            }
                         </Col>
 
                     </Row>

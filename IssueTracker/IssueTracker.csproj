@@ -82,10 +82,10 @@
     <None Remove="ClientApp\src\store\TicketStoreDetail.ts" />
     <None Remove="ClientApp\src\store\UserStore.ts" />
     <None Remove="ClientApp\src\store\UserStoreDetail.ts" />
+    <None Remove="ClientApp\src\utils\ToString.tsx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\static\img\" />
   </ItemGroup>
 
@@ -145,6 +145,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\store\UserStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\utils\ToString.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

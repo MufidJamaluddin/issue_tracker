@@ -40,7 +40,7 @@ const AppInner = (props: { droutes: RoutesItem[], dmenus: MenuItem[], requireLog
 const DashboardApp = (props) => <AppInner 
     droutes={DashboardRoutes}
     dmenus={DashboardMenus}
-    requireLogin={false}
+    requireLogin={true}
     {...props}
 />
 

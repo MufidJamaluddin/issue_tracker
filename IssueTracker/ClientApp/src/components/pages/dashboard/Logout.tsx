@@ -8,7 +8,7 @@ import { compose } from 'redux';
 
 type LogoutProps = AuthStore.LoginState & typeof AuthStore.actionCreators & RouteComponentProps<any>
 
-class Logout extends React.PureComponent<LogoutProps>
+class Logout extends React.Component<LogoutProps>
 {
     private redirectToHome(): void
     {
@@ -20,9 +20,9 @@ class Logout extends React.PureComponent<LogoutProps>
         return (null);
     }
 
-    public componentDidMount(): void
+    public loginPolicy(): void
     {
-        if (this.props.data.token === null)
+        if (this.props.data.id === null || this.props.data.id === undefined)
         {
             this.redirectToHome()
         }
@@ -32,16 +32,14 @@ class Logout extends React.PureComponent<LogoutProps>
         }
     }
 
+    public componentDidMount(): void
+    {
+        this.loginPolicy()
+    }
+
     public componentDidUpdate(): void
     {
-        if (this.props.data.token === null)
-        {
-            this.redirectToHome()
-        }
-        else
-        {
-            this.props.requestLogout()
-        }
+        this.loginPolicy()
     }
 
 }
@@ -52,4 +50,4 @@ export default compose(
         (state: ApplicationState) => state.authStore,
         AuthStore.actionCreators
     )
-)(Logout as any)
+)(Logout)

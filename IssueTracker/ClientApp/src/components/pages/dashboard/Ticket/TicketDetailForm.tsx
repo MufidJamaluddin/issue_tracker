@@ -37,7 +37,7 @@ class TicketDetailForm extends React.PureComponent<TicketDetailFormItemProps>
                     showID &&
                     <Col md={md}>
                         <FormGroup row className="thin-padding-right">
-                            <Label for="category_src_id" className="text-left" sm={3}>ID</Label>
+                            <Label for="category_src_id" className="text-left" sm={3}>ID *</Label>
                             <Col sm={9}>
                                 <Input
                                     type="text"
@@ -54,7 +54,7 @@ class TicketDetailForm extends React.PureComponent<TicketDetailFormItemProps>
 
                 <Col md={md}>
                     <FormGroup row className="thin-padding-right">
-                        <Label for="ticket_src_name" className="text-left" sm={3}>Name</Label>
+                        <Label for="ticket_src_name" className="text-left" sm={3}>Name *</Label>
                         <Col sm={9}>
                             <Input
                                 type="text"
@@ -110,7 +110,7 @@ class TicketDetailForm extends React.PureComponent<TicketDetailFormItemProps>
 
                 <Col md={md}>
                     <FormGroup row className="thin-padding-right">
-                        <Label for="ticket_src_created_date" className="text-left" sm={3}>Created Date</Label>
+                        <Label for="ticket_src_created_date" className="text-left" sm={3}>Created Date *</Label>
                         <Col sm={9}>
                             <Input
                                 type="date"

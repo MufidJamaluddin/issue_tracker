@@ -12,6 +12,7 @@ export interface TicketState {
 }
 
 export interface TicketItem {
+    status_color?: string;
     id: string
     name: string
     description: string

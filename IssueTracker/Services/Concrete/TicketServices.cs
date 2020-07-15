@@ -63,6 +63,11 @@ namespace IssueTracker.Services.Concrete
             {
                 string transactionId = TransactionRepository.InitializeTransaction(transaction);
 
+                if (data != null)
+                {
+                    data.OwnerID = transaction?.UserId;
+                }
+
                 result = TicketRepository.SaveData(data, transactionId);
 
                 dbTransaction.Commit();

@@ -20,7 +20,7 @@ namespace IssueTracker.Models.ViewModels
         [JsonProperty(PropertyName = "image")]
         public string Image { get; set; }
 
-        [JsonProperty(PropertyName = "token")]
+        [JsonProperty(PropertyName = "token", NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; }
 
         public AuthenticateResponse(UserVM user, string token)

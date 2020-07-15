@@ -8,6 +8,9 @@ import { withRouter } from 'react-router'
 import { ApplicationState } from '../../../../store'
 
 import * as TicketStoreDetail from '../../../../store/TicketStoreDetail'
+
+import ToString from './../../../../utils/ToString'
+
 import { Link } from 'react-router-dom'
 import { TicketItem } from '../../../../store/TicketStore'
 import { compose } from 'redux'
@@ -28,11 +31,6 @@ class NewTicket extends React.PureComponent<NewTicketProps>
         event.preventDefault();
 
         let data = new FormData(event.target);
-
-        const ToString = (val: FormDataEntryValue): string => {
-            if (val) return val.toString()
-            else return null
-        }
 
         let itemData: TicketItem = {
             id: null,
@@ -64,6 +62,10 @@ class NewTicket extends React.PureComponent<NewTicketProps>
     {
         let data = this.props.data
 
+        data.ismyassignedticket = true
+
+        let is_successed = this.props.code == 'S'
+
         return (
             <Container>
                 <Form onSubmit={this.onSaveSubmit}>
@@ -77,20 +79,23 @@ class NewTicket extends React.PureComponent<NewTicketProps>
                                 </Alert>
                             </Col>
                         }
+                        {
+                            (!is_successed) &&
+                            <>
+                                <Col md="12">
+                                    <h1 className="display-4 text-center">New Ticket</h1>
+                                    <br />
+                                </Col>
 
-                        <Col md="12">
-                            <h1 className="display-4 text-center">New Ticket</h1>
-                            <br />
-                        </Col>
-
-                        <TicketDetailForm
-                            md="12"
-                            data={data}
-                            readOnly={false}
-                            readOnlyID={false}
-                            showID={false}
-                        />
-
+                                <TicketDetailForm
+                                    md="12"
+                                    data={data}
+                                    readOnly={false}
+                                    readOnlyID={false}
+                                    showID={false}
+                                />
+                            </>
+                        }
                         <Col md="12">
                             <Link to="/dashboard/ticket">
                                 <Button type="button" color="light">
@@ -98,10 +103,13 @@ class NewTicket extends React.PureComponent<NewTicketProps>
                                     Back
                                 </Button>
                             </Link>
-                            <Button type="submit" color="light">
-                                <span><i className="fa fa-floppy-o" /></span> &nbsp;
-                                Save
-                            </Button>
+                            {
+                                (!is_successed) &&
+                                <Button type="submit" color="light">
+                                    <span><i className="fa fa-floppy-o" /></span> &nbsp;
+                                    Save
+                                </Button>
+                            }
                         </Col>
 
                     </Row>

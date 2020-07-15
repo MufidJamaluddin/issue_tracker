@@ -31,7 +31,7 @@ namespace IssueTracker.Controllers.Api
         {
             TicketVM data = TicketServices.GetDataById(id);
 
-            data.SetLoggedUser(User.FindFirst("id")?.Value ?? "");
+            data.SetLoggedUser(User.FindFirst(ClaimTypes.Name)?.Value ?? "");
 
             return data;
         }

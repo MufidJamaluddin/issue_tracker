@@ -125,6 +125,17 @@ namespace IssueTracker.Models.Repositories
 
             string error_message = "";
 
+            if(data?.CreatedDate == null)
+            {
+                error_message += "Created Date must be filled!, ";
+            }
+
+            if (string.IsNullOrEmpty(data?.Name))
+            {
+                error_message += "Name must be filled!, ";
+            }
+
+            /*
             if (assignee == null)
             {
                 error_message += "Assignee must be filled!, ";
@@ -134,6 +145,7 @@ namespace IssueTracker.Models.Repositories
             {
                 error_message += "Owner must be filled!, ";
             }
+            */
 
             if (category == null)
             {
@@ -144,8 +156,8 @@ namespace IssueTracker.Models.Repositories
             {
                 error_message += "Status must be filled!, ";
             }
-
-            if (string.IsNullOrEmpty(error_message))
+            
+            if (!string.IsNullOrEmpty(error_message))
             {
                 return new CommonResponse<TicketVM>
                 {
@@ -231,7 +243,10 @@ namespace IssueTracker.Models.Repositories
                 };
             }
 
-            Ticket lastData = DbContext.Tickets.Where(u => u.Id == data.Id).FirstOrDefault();
+            Ticket lastData = DbContext
+                .Tickets
+                .Where(u => u.Id == data.Id)
+                .FirstOrDefault();
 
             if (lastData == null)
             {
@@ -258,7 +273,7 @@ namespace IssueTracker.Models.Repositories
                 lastData.CategoryId = category.Id;
             }
 
-            if (status != null && lastData.Assignee?.Id == loggedUserId)
+            if (status != null && lastData.AssigneeId == loggedUserId)
             {
                 lastData.StatusId = status.Id;
             }

@@ -2,6 +2,8 @@
 import { AppThunkAction } from '.';
 import { StartLoadingAction, EndLoadingAction } from './LoadingStore';
 
+import { merge } from 'lodash'
+
 export interface LoginState {
     data: LoginItem
     code: string
@@ -32,10 +34,52 @@ interface ReceiveLoginAction {
     data: LoginState
 }
 
+interface ReceiveLoginDataAction {
+    type: 'RECEIVE_LOGIN_USER_DATA'
+    data: LoginItem
+}
+
 type KnownAction = RequestLoginAction | ReceiveLoginAction | StartLoadingAction | EndLoadingAction
-    | RequestLogoutAction;
+    | RequestLogoutAction | ReceiveLoginDataAction
+
+export const getLoginData = function () {
+    const fetchData = fetch(`api/login`, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(
+        response => response.json() as Promise<LoginItem>
+    )
+
+    return fetchData
+}
 
 export const actionCreators = {
+
+    requestUserData: ():
+        AppThunkAction<KnownAction> => (dispatch, getState) => {
+
+            const appState = getState();
+
+            if (
+                appState &&
+                appState.authStore &&
+                (appState.authStore.data.token == null || appState.authStore.data.token == undefined)
+            ) {
+                dispatch({ type: 'START_LOADING' });
+
+                getLoginData().then(userdata => {
+                    dispatch({ type: 'RECEIVE_LOGIN_USER_DATA', data: userdata });
+                    dispatch({ type: 'END_LOADING' });
+                }).catch(ex => {
+                    dispatch({ type: 'END_LOADING' });
+                })
+            }
+        },
+
     requestLogin: (email: string, password: string):
         AppThunkAction<KnownAction> => (dispatch, getState) => {
 
@@ -46,6 +90,7 @@ export const actionCreators = {
                 appState.authStore &&
                 (appState.authStore.data.token == null || appState.authStore.data.token == undefined)
             ) {
+                dispatch({ type: 'START_LOADING' });
 
                 const requestData = {
                     email: email,
@@ -64,6 +109,8 @@ export const actionCreators = {
                     response => response.json() as Promise<LoginState>
                 )
                 .then(data => {
+                    data['token'] = 'abcdefgh'
+
                     dispatch({ type: 'RECEIVE_LOGIN', data: { ...data } });
                     dispatch({ type: 'END_LOADING' });
                 })
@@ -71,7 +118,6 @@ export const actionCreators = {
                     dispatch({ type: 'END_LOADING' });
                 });
 
-                dispatch({ type: 'START_LOADING' });
                 dispatch({ type: 'REQUEST_LOGIN', email: email, password: password });
             }
         },
@@ -81,12 +127,14 @@ export const actionCreators = {
 
             const appState = getState();
 
+            console.log('CALL Logout..')
+
             if (
                 appState &&
-                appState.authStore &&
-                appState.authStore.data.token != null &&
-                appState.authStore.data.token != undefined
+                appState.authStore
             ) {
+                dispatch({ type: 'START_LOADING' });
+
                 fetch(`api/login`, {
                     method: 'DELETE',
                     cache: 'no-cache',
@@ -101,10 +149,8 @@ export const actionCreators = {
                     dispatch({ type: 'END_LOADING' });
                 });
 
-                dispatch({ type: 'START_LOADING' });
+                dispatch({ type: 'REQUEST_LOGOUT' });
             }
-
-            dispatch({ type: 'REQUEST_LOGOUT' });
         },
 
 };
@@ -127,7 +173,7 @@ export const reducer: Reducer<LoginState> = (
 
     if (state === undefined)
     {
-        return unloadedState;
+        return unloadedState
     }
 
     const action = incomingAction as KnownAction;
@@ -135,17 +181,23 @@ export const reducer: Reducer<LoginState> = (
     let newState = null;
 
     switch (action.type) {
-        case 'REQUEST_LOGIN':
+
+        case 'RECEIVE_LOGIN_USER_DATA':
 
             newState = {
-                ...state
+                ...unloadedState,
+                data: action.data,
             }
 
-            return newState
+            return merge({}, newState)
+
+        case 'REQUEST_LOGIN':
+
+            return state
 
         case 'REQUEST_LOGOUT':
 
-            newState = { ...unloadedState }
+            newState = merge({}, unloadedState)
 
             return newState
 

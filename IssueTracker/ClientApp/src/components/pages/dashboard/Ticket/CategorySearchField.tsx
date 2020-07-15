@@ -187,7 +187,7 @@ class CategorySearchField extends React.PureComponent<
                 <Col md={md}>
                     <FormGroup row className="thin-padding-right">
                         <Label for={'csf_src_' + fieldName} className="text-left" sm={3}>
-                            {fieldText}
+                            {fieldText} *
                         </Label>
                         {
                             (!selected) &&

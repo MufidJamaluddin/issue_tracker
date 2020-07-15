@@ -3,7 +3,7 @@ import { Row, Col, Form, Label, FormGroup, Button, Input, Alert, Container, Spin
 
 import { TicketItem } from '../../../../store/TicketStore'
 
-import SelectTicketStatuses from './SelectTicketStatuses'
+import ToString from './../../../../utils/ToString'
 
 import { RouteComponentProps, withRouter } from 'react-router'
 import { connect } from 'react-redux'
@@ -98,17 +98,17 @@ class TicketDetail extends React.PureComponent<TicketDetailProps>
 
         let itemData: TicketItem = {
             id: this.props.data.id,
-            name: data.get('name').toString(),
-            category_id: data.get('category_id').toString(),
-            category_name: data.get('category_name').toString(),
-            status_id: data.get('status_id').toString(),
-            status: null, // AUTO
-            description: data.get('description').toString(),
-            created_date: data.get('created_date').toString(),
-            assignee_id: data.get('assignee_id').toString(),
-            assignee: data.get('assignee').toString(),
-            owner_id: data.get('owner_id').toString(),
-            owner: data.get('owner').toString(),
+            name: ToString(data.get('name')),
+            category_id: ToString(data.get('category_id')),
+            category_name: ToString(data.get('category_name')),
+            status_id: ToString(data.get('status_id')),
+            status: null,
+            description: ToString(data.get('description')),
+            created_date: ToString(data.get('created_date')),
+            assignee_id: ToString(data.get('assignee_id')),
+            assignee: ToString(data.get('assignee')),
+            owner_id: ToString(data.get('owner_id')),
+            owner: ToString(data.get('owner')),
         }
 
         this.props.requestUpdateOneTicket(this.props.data.id, itemData)

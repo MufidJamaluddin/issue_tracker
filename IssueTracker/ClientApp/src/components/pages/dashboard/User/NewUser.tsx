@@ -50,47 +50,12 @@ class NewUser extends React.PureComponent<NewUserProps>
         }
     }
 
-    renderLoading(): JSX.Element {
-        return (
-            <Container>
-                <Row md="12">
-                    {
-                        (this.props.code !== null && this.props.code !== '') &&
-                        <>
-                            <Col md="12">
-                                <Alert color="warning">
-                                    <b>{this.props.code} :&nbsp;</b>{this.props.message}
-                                </Alert>
-                            </Col>
-                            <Col md="12">
-                                <Link to="/dashboard/user">
-                                    <Button type="button" color="light">
-                                        <span><i className="fa fa-chevron-left" /></span> &nbsp;
-                                        Back
-                                    </Button>
-                                </Link>
-                            </Col>
-                        </>
-                    }
-                    <Col md="12">
-                        {
-                            (this.props.code === null || this.props.code === '') &&
-                            <Spinner />
-                        }
-                    </Col>
-                </Row>
-            </Container>
-        )
-    }
 
     render(): JSX.Element
     {
         let data = this.props.data
 
-        if (data.id !== null && data.id !== '')
-        {
-            return this.renderLoading()
-        }
+        let is_successed = this.props.code == 'S'
 
         return (
             <Container>
@@ -105,19 +70,23 @@ class NewUser extends React.PureComponent<NewUserProps>
                                 </Alert>
                             </Col>
                         }
+                        {
+                            (!is_successed) &&
+                            <>
+                                <Col md="12">
+                                    <h1 className="display-4 text-center">New User</h1>
+                                    <br />
+                                </Col>
 
-                        <Col md="12">
-                            <h1 className="display-4 text-center">New User</h1>
-                            <br />
-                        </Col>
-
-                        <UserDetailForm
-                            md="12"
-                            data={data}
-                            readOnly={false}
-                            readOnlyID={false}
-                            showID={false}
-                        />
+                                <UserDetailForm
+                                    md="12"
+                                    data={data}
+                                    readOnly={false}
+                                    readOnlyID={false}
+                                    showID={false}
+                                />
+                            </>
+                        }
 
                         <Col md="12">
                             <Link to="/dashboard/user">
@@ -126,10 +95,13 @@ class NewUser extends React.PureComponent<NewUserProps>
                                     Back
                                 </Button>
                             </Link>
-                            <Button type="submit" color="light">
-                                <span><i className="fa fa-floppy-o" /></span> &nbsp;
-                                Save
-                            </Button>
+                            {
+                                (!is_successed) &&
+                                <Button type="submit" color="light">
+                                    <span><i className="fa fa-floppy-o" /></span> &nbsp;
+                                        Save
+                                </Button>
+                            }
                         </Col>
 
                     </Row>

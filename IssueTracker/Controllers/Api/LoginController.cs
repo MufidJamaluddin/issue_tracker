@@ -26,14 +26,9 @@ namespace IssueTracker.Controllers.Api
 
         [HttpGet]
         [Authorize(Roles = RolePolicy.User + "," + RolePolicy.ProductOwner)]
-        public UserVM GetUserData()
+        public AuthenticateResponse GetUserData()
         {
-            return new UserVM
-            {
-                Id = User.FindFirst(ClaimTypes.Name)?.Value,
-                Email = User.FindFirst(ClaimTypes.Email)?.Value,
-                Role = User.FindFirst(ClaimTypes.Role)?.Value,
-            };
+            return this.AuthService.GetCurrentAuthUserData(User);
         }
 
         /// <summary>
@@ -51,16 +46,13 @@ namespace IssueTracker.Controllers.Api
             {
                 CookieOptions cookieOptions = new CookieOptions
                 {
+                    Domain = HttpContext.Request.Host.Value.ToString().Split(':')[0],
+                    Path = "/",
                     Expires = DateTimeOffset.UtcNow.AddDays(7),
                     HttpOnly = true,
                     Secure = false,
                     SameSite = SameSiteMode.Lax,
                 };
-
-                Response.Headers.Append(
-                    "Authorization",
-                    string.Format(CultureInfo.InvariantCulture, "Bearer {0}", data.Data.Token)
-                );
 
                 Response.Cookies.Append(
                     JwtInCookieMiddleware.JWT_COOKIE_KEY,

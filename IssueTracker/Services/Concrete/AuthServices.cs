@@ -5,7 +5,10 @@ using IssueTracker.Models.ViewModels.Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -28,9 +31,23 @@ namespace IssueTracker.Services.Concrete
             _userRepository = userRepository;
         }
 
+        public AuthenticateResponse GetCurrentAuthUserData(ClaimsPrincipal userClaim)
+        {
+            AuthenticateResponse response;
+
+            UserVM user = this._userRepository.GetOne(new UserVM { 
+                Id = userClaim?.FindFirst(ClaimTypes.Name)?.Value,
+                Email = userClaim?.FindFirst(ClaimTypes.Email)?.Value,
+            });
+
+            response = new AuthenticateResponse(user, null);
+
+            return response;
+        }
+
         public CommonSResponse<AuthenticateResponse> Authenticate(AuthenticateRequest model, string clientIpAddress)
         {
-            System.Collections.Generic.List<System.ComponentModel.DataAnnotations.ValidationResult> validationRequest = model.ValidateModelData(true);
+            List<ValidationResult> validationRequest = model.ValidateModelData(true);
 
             if (validationRequest.Count > 0)
             {
