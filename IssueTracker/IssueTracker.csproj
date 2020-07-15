@@ -1,0 +1,177 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\components\Category.tsx" />
+    <None Remove="ClientApp\src\components\Login.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Category\CategoryDetailForm.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Category\CategorySearchForm.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Category\NewCategory.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Home.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Logout.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\CategorySearchField.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\NewTicket.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\SelectTicketStatuses.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketDetail.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketDetailForm.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\TicketSearchForm.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\Ticket\UserSearchField.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\User\NewUser.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\User\UserDetail.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\User\UserDetailForm.tsx" />
+    <None Remove="ClientApp\src\components\pages\dashboard\User\UserSearchForm.tsx" />
+    <None Remove="ClientApp\src\components\shared\CLoading.tsx" />
+    <None Remove="ClientApp\src\components\shared\NeedAuth.tsx" />
+    <None Remove="ClientApp\src\components\shared\ProfileMenu.tsx" />
+    <None Remove="ClientApp\src\components\Ticket.tsx" />
+    <None Remove="ClientApp\src\components\User.tsx" />
+    <None Remove="ClientApp\src\menus.ts" />
+    <None Remove="ClientApp\src\monthtexter.ts" />
+    <None Remove="ClientApp\src\routes.tsx" />
+    <None Remove="ClientApp\src\store\AuthStore.ts" />
+    <None Remove="ClientApp\src\store\CategoryStore.ts" />
+    <None Remove="ClientApp\src\store\CategoryStoreDetail.ts" />
+    <None Remove="ClientApp\src\store\LoadingStore.tsx" />
+    <None Remove="ClientApp\src\store\shared\MessageResponseModel.ts" />
+    <None Remove="ClientApp\src\store\shared\PaginationResponseModel.ts" />
+    <None Remove="ClientApp\src\store\shared\ResponseModel.ts" />
+    <None Remove="ClientApp\src\store\TicketStatusStore.ts" />
+    <None Remove="ClientApp\src\store\TicketStore.ts" />
+    <None Remove="ClientApp\src\store\TicketStoreDetail.ts" />
+    <None Remove="ClientApp\src\store\UserStore.ts" />
+    <None Remove="ClientApp\src\store\UserStoreDetail.ts" />
+    <None Remove="ClientApp\src\utils\ToString.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\static\img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="ToDevs\ISeed.cs" />
+    <None Include="ToDevs\SeedData\ASeedData.cs" />
+    <None Include="ToDevs\SeedData\SeedUserData.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category\CategoryDetailForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category\CategorySearchForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Category\NewCategory.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Home.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Logout.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\CategorySearchField.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\NewTicket.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\SelectTicketStatuses.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\TicketDetail.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\TicketDetailForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\TicketSearchForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket\UserSearchField.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\NewUser.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\UserDetail.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\UserDetailForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User\UserSearchForm.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\public\Login.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\User.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\components\pages\dashboard\Ticket.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\shared\CLoading.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\shared\NeedAuth.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\shared\ProfileMenu.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\menus.ts" />
+    <TypeScriptCompile Include="ClientApp\src\monthtexter.ts" />
+    <TypeScriptCompile Include="ClientApp\src\routes.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\store\AuthStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\CategoryStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\LoadingStore.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\store\shared\ResponseModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\TicketStatusStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\TicketStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\TicketStore.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\CategoryStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\shared\PaginationResponseModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\shared\MessageResponseModel.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\UserStoreDetail.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\store\UserStore.ts" />
+    <TypeScriptCompile Include="ClientApp\src\utils\ToString.tsx" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)build\**; $(SpaRoot)build-ssr\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>
