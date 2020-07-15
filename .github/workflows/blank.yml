@@ -28,8 +28,3 @@ jobs:
     - name: Testing an ASP.NET Backend Application
       run: |
         dotnet test
-
-    - name: Testing an ReactJS Frontend Application
-      run: |
-	cd IssueTracker/ClientApp
-        npm run test
